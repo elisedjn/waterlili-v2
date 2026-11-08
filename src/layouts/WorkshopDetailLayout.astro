@@ -1,0 +1,200 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import Carousel from '@components/Carousel.astro';
+import LinkButton from '@components/LinkButton.astro';
+import Tag from '@components/Tag.astro';
+import { locationInfo } from '@config/locations';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { type Locale } from '@i18n/config';
+import { localizedRoutes, withBase } from '@i18n/routes';
+import { getWorkshopPath } from '@i18n/workshops';
+import { sharedText, siteName } from '@i18n/ui';
+import { getBookingHref } from '@utils/booking';
+
+interface Props {
+  workshop: CollectionEntry<'workshops'>;
+}
+
+const { workshop } = Astro.props;
+const { Content } = await render(workshop);
+const lang = workshop.data.lang as Locale;
+const location = locationInfo[workshop.data.location];
+const canonicalPath = getWorkshopPath(lang, workshop.data.slug);
+const canonicalUrl = new URL(withBase(canonicalPath), Astro.site).toString();
+const parentPath = localizedRoutes.workshops[lang];
+const bookingUrl = getBookingHref(workshop.data.bookingUrl, workshop.data.bookingMessage);
+const mainImage = workshop.data.images[0];
+const seoAlternates = { [lang]: canonicalPath };
+const numericPrice = workshop.data.price?.match(/\d+(?:[.,]\d+)?/)?.[0]?.replace(',', '.');
+const eventSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: workshop.data.title,
+  description: workshop.data.description,
+  url: canonicalUrl,
+  image: workshop.data.images.map((src) => new URL(withBase(src), Astro.site).toString()),
+  inLanguage: lang,
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  eventStatus: 'https://schema.org/EventScheduled',
+  startDate: workshop.data.startDate?.toISOString(),
+  location: workshop.data.place
+    ? {
+        '@type': 'Place',
+        name: workshop.data.place,
+        address: workshop.data.address,
+      }
+    : undefined,
+  organizer: {
+    '@type': 'Organization',
+    name: siteName,
+  },
+  offers: workshop.data.price
+    ? {
+        '@type': 'Offer',
+        url: bookingUrl,
+        price: numericPrice,
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock',
+      }
+    : undefined,
+};
+const labels = {
+  en: {
+    back: 'Back to workshops',
+    date: 'Date & Time',
+    duration: 'Duration',
+    price: 'Price',
+    place: 'Place',
+  },
+  fr: {
+    back: 'Retour aux ateliers',
+    date: 'Date et heure',
+    duration: 'Durée',
+    price: 'Prix',
+    place: 'Lieu',
+  },
+  pt: {
+    back: 'Voltar aos workshops',
+    date: 'Data e hora',
+    duration: 'Duração',
+    price: 'Preço',
+    place: 'Local',
+  },
+}[lang];
+---
+
+<BaseLayout
+  title={`${workshop.data.title} | ${siteName}`}
+  description={workshop.data.description}
+  lang={lang}
+  routeKey='workshops'
+  canonicalPath={canonicalPath}
+  seoAlternates={seoAlternates}
+  image={mainImage}
+  jsonLd={eventSchema}
+>
+  <article class='mx-auto max-w-5xl px-5 py-8 md:py-16'>
+    <a
+      href={withBase(parentPath)}
+      class='text-sm font-black uppercase tracking-[0.18em] text-blue transition hover:text-pink'
+    >
+      ← {labels.back}
+    </a>
+    <header class='mt-10 rounded-[2.75rem] shadow-xl shadow-pink/20 md:p-10'>
+      <Carousel
+        images={workshop.data.images.map((src) => ({ src }))}
+        title={workshop.data.title}
+        lang={lang}
+        variant='wide'
+        priority
+      />
+      <div class='rounded-b-[2.1rem] bg-white/80 p-7 md:p-10'>
+        <Tag color={location.color}>{location.label}</Tag>
+        <h1 class='mt-3 font-heading text-5xl font-bold text-pink md:text-7xl'>
+          {workshop.data.title}
+        </h1>
+        <div class='mt-4 max-w-3xl text-grey/75 prose-workshop'>
+          <Content />
+        </div>
+      </div>
+    </header>
+
+    <section class='mt-8 grid gap-3 md:grid-cols-4'>
+      <div class='rounded-2xl bg-yellow/35 p-4'>
+        <dt class='text-xs font-black uppercase tracking-[0.18em] text-pink'>
+          {labels.date}
+        </dt>
+        <dd class='mt-1 font-bold text-grey'>
+          <span class='block'>{workshop.data.date}</span>
+          {
+            workshop.data.time && (
+              <span class='mt-1 block text-sm font-medium text-grey/70'>
+                {workshop.data.time}
+              </span>
+            )
+          }
+        </dd>
+      </div>
+      {
+        workshop.data.duration && (
+          <div class='rounded-2xl bg-blue/20 p-4'>
+            <dt class='text-xs font-black uppercase tracking-[0.18em] text-pink'>
+              {labels.duration}
+            </dt>
+            <dd class='mt-1 font-bold text-grey'>
+              <span class='block'>{workshop.data.duration}</span>
+              {workshop.data.durationDetails && (
+                <span class='mt-1 block text-sm font-medium text-grey/70'>
+                  {workshop.data.durationDetails}
+                </span>
+              )}
+            </dd>
+          </div>
+        )
+      }
+      {
+        workshop.data.price && (
+          <div class='rounded-2xl bg-green/25 p-4'>
+            <dt class='text-xs font-black uppercase tracking-[0.18em] text-pink'>
+              {labels.price}
+            </dt>
+            <dd class='mt-1 font-bold text-grey'>
+              <span class='block'>{workshop.data.price}</span>
+              {workshop.data.priceDetails && (
+                <span class='mt-1 block text-sm font-medium text-grey/70'>
+                  {workshop.data.priceDetails}
+                </span>
+              )}
+            </dd>
+          </div>
+        )
+      }
+      {
+        workshop.data.place && (
+          <div class='rounded-2xl bg-orange/25 p-4'>
+            <dt class='text-xs font-black uppercase tracking-[0.18em] text-pink'>
+              {labels.place}
+            </dt>
+            <dd class='mt-1 font-bold text-grey'>
+              <span class='block'>{workshop.data.place}</span>
+              {workshop.data.address && (
+                <span class='mt-1 block whitespace-pre-line text-sm font-medium text-grey/70'>
+                  {workshop.data.address}
+                </span>
+              )}
+            </dd>
+          </div>
+        )
+      }
+    </section>
+
+    <div class='mt-8 text-center'>
+      <LinkButton fullWidth href={bookingUrl}>{sharedText[lang].bookCta}</LinkButton>
+    </div>
+  </article>
+  <div
+    class='fixed inset-x-0 bottom-0 z-50 border-t border-pink/20 bg-white/90 px-5 py-8 shadow-[0_-1rem_3rem_rgb(83_84_85/0.12)] backdrop-blur-xl md:hidden'
+  >
+    <LinkButton fullWidth href={bookingUrl}>{sharedText[lang].bookCta}</LinkButton>
+  </div>
+</BaseLayout>

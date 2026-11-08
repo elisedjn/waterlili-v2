@@ -1,0 +1,91 @@
+---
+import Icon from '@components/Icon.astro';
+import { contactLinks } from '@config/contact';
+import { type Locale, type RouteKey } from '@i18n/config';
+import { localizedRoutes, withBase } from '@i18n/routes';
+import { navLabels, sharedText, siteName } from '@i18n/ui';
+import { getBookingHref } from '../utils/booking';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const year = new Date().getFullYear();
+const links: RouteKey[] = ['workshops', 'shop', 'atHome', 'blog'];
+const whatsappHref = getBookingHref(contactLinks.whatsapp, contactLinks.whatsappMessage);
+const socialLinks = [
+  {
+    label: 'Instagram',
+    href: contactLinks.instagram,
+    icon: 'instagram',
+  },
+  {
+    label: 'Facebook',
+    href: contactLinks.facebook,
+    icon: 'facebook',
+  },
+  {
+    label: 'Email',
+    href: contactLinks.email,
+    icon: 'email',
+  },
+  {
+    label: 'Ko-fi',
+    href: contactLinks.kofi,
+    icon: 'kofi',
+  },
+] as const;
+---
+
+<footer class='mt-8 md:mt-24 border-t border-pink/20 bg-pink text-ink'>
+  <div class='mx-auto grid max-w-6xl gap-10 px-5 py-12 md:grid-cols-[1.2fr_1fr]'>
+    <div>
+      <p class='font-heading text-4xl text-white font-bold'>{siteName}</p>
+      <p class='mt-4 max-w-xl text-white'>
+        {sharedText[lang].footerDescription}
+      </p>
+      <a
+        href={whatsappHref}
+        class='mt-6 inline-flex rounded-full bg-white px-6 py-3 text-sm font-black uppercase tracking-[0.18em] text-pink transition hover:bg-yellow hover:text-white'
+      >
+        {sharedText[lang].contactCta}
+      </a>
+      <nav aria-label='Social links' class='mt-6 flex flex-wrap gap-3'>
+        {
+          socialLinks.map((item) => (
+            <a
+              href={item.href}
+              aria-label={item.label}
+              target={item.href.startsWith('http') ? '_blank' : undefined}
+              rel={item.href.startsWith('http') ? 'noreferrer' : undefined}
+              class='grid size-11 place-items-center rounded-full border border-white bg-pink/25 text-white transition hover:-translate-y-0.5 hover:bg-white/55 hover:text-pink'
+            >
+              <Icon name={item.icon} class='size-5' />
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+    <nav
+      class='flex flex-wrap items-start justify-center md:justify-end'
+      aria-label='Footer navigation'
+    >
+      {
+        links.map((link, index) => (
+          <a
+            href={withBase(localizedRoutes[link][lang])}
+            class='p-2 text-sm font-bold text-white transition hover:text-grey'
+          >
+            {navLabels[lang][link]}
+            {index < links.length - 1 && <span class='ml-2'> | </span>}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+  <div class='border-t border-white/25 px-5 py-5 text-center text-sm text-white'>
+    © {year}
+    {siteName}
+  </div>
+</footer>

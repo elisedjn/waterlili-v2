@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.astro/
+.env
+.DS_Store
+
+# High-resolution scans: must never be published
+originals/

@@ -1,0 +1,86 @@
+---
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import SEO from '@components/SEO.astro';
+import { type Locale, type RouteKey } from '@i18n/config';
+import { localizedRoutes, withBase } from '@i18n/routes';
+import '@styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  lang: Locale;
+  routeKey?: RouteKey;
+  canonicalPath?: string;
+  image?: string;
+  seoType?: 'website' | 'article';
+  seoAlternates?: Partial<Record<Locale, string>>;
+  /** Full set of translated URLs for this exact page (used for hreflang and the language switcher). */
+  alternates?: Record<Locale, string>;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title,
+  description,
+  lang,
+  routeKey = 'home',
+  canonicalPath,
+  image,
+  seoType,
+  seoAlternates,
+  alternates: pageAlternates,
+  jsonLd,
+} = Astro.props;
+const alternates = pageAlternates ?? localizedRoutes[routeKey];
+const path = canonicalPath ?? alternates[lang];
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <meta name='generator' content={Astro.generator} />
+    <link rel='icon' type='image/svg+xml' href={withBase('/favicon.ico')} />
+    <link rel='preconnect' href='https://fonts.googleapis.com' />
+    <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin />
+    <link
+      rel='stylesheet'
+      href='https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Quicksand:wght@300..700&display=swap'
+    />
+    <SEO
+      title={title}
+      description={description}
+      lang={lang}
+      canonicalPath={path}
+      alternates={seoAlternates ?? alternates}
+      image={image}
+      type={seoType}
+      jsonLd={jsonLd}
+    />
+    <slot name='head' />
+    <!-- Privacy-friendly analytics by Plausible -->
+    <script is:inline async src='https://plausible.io/js/pa-jmxoFNaiboFMDzAC-fxHd.js'></script>
+    <script>
+      ((window.plausible =
+        window.plausible ||
+        function () {
+          (plausible.q = plausible.q || []).push(arguments);
+        }),
+        (plausible.init =
+          plausible.init ||
+          function (i) {
+            plausible.o = i || {};
+          }));
+      plausible.init();
+    </script>
+  </head>
+  <body>
+    <Header lang={lang} currentRoute={routeKey} alternates={alternates} />
+    <main>
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

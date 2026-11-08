@@ -1,0 +1,63 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Card from '@components/Card.astro';
+import LinkButton from '@components/LinkButton.astro';
+import Tag from '@components/Tag.astro';
+import { locationInfo, type WorkshopLocation } from '@config/locations';
+import { type Locale } from '@i18n/config';
+import { withBase } from '@i18n/routes';
+import { nextWorkshopContent, sharedText } from '@i18n/ui';
+import { getWorkshopPath } from '@i18n/workshops';
+import { getBookingHref } from '@utils/booking';
+import Carousel from './Carousel.astro';
+
+interface Props {
+  lang: Locale;
+  location: WorkshopLocation;
+  /** Next upcoming workshop in this location; when missing a generic "ask for the next date" card is shown. */
+  workshop?: CollectionEntry<'workshops'>;
+}
+
+const { lang, location, workshop } = Astro.props;
+const fallback = nextWorkshopContent[lang];
+const info = locationInfo[location];
+const contactHref = 'mailto:waterlilicreations@gmail.com';
+---
+
+<Card variant='outline' class='flex flex-col'>
+  <a href={withBase(getWorkshopPath(lang, workshop?.data?.slug ?? ''))}>
+    <div class='relative overflow-hidden max-h-42'>
+      <Tag color={info.color} class='absolute left-4 top-4 z-10'>{info.label}</Tag>
+      <Carousel
+        images={[{ src: workshop?.data.images[0] ?? '' }]}
+        variant='card'
+        title={workshop?.data.title ?? ''}
+        lang={lang}
+      />
+    </div>
+    <div class='p-3 pb-6'>
+      <h3 class='font-heading text-2xl font-bold leading-[0.9] text-pink md:text-3xl'>
+        {workshop ? workshop.data.title : fallback.title}
+      </h3>
+      <p class='pt-3'>
+        {workshop ? workshop.data.date : fallback.date}
+        {
+          workshop?.data.time && (
+            <span class='text-sm text-grey/70'>| {workshop.data.time}</span>
+          )
+        }
+      </p>
+
+      {
+        !workshop && (
+          <>
+            <p class='mt-2 text-grey/75'>{fallback.description}</p>
+            <div class='mt-auto flex flex-wrap gap-3 pt-3'>
+              <LinkButton href={contactHref}>{fallback.cta}</LinkButton>
+            </div>
+          </>
+        )
+      }
+    </div>
+  </a>
+</Card>

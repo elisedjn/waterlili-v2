@@ -1,0 +1,78 @@
+---
+import Carousel from '@components/Carousel.astro';
+import FormatList from '@components/FormatList.astro';
+import OrderContact from '@components/OrderContact.astro';
+import { type Locale } from '@i18n/config';
+import { artworkAlternates, shopPath, withBase } from '@i18n/routes';
+import { sharedText, siteName } from '@i18n/ui';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { toCarouselImages, type Artwork } from '@utils/artworks';
+
+interface Props {
+  artwork: Artwork;
+  lang: Locale;
+}
+
+const { artwork, lang } = Astro.props;
+const text = sharedText[lang];
+const title = artwork.data.title[lang];
+const alt = artwork.data.alt[lang];
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'VisualArtwork',
+  name: title,
+  description: alt,
+  artMedium: 'Watercolor',
+  inLanguage: lang,
+  image: new URL(withBase(artwork.images[0].large.src), Astro.site).toString(),
+  creator: { '@type': 'Organization', name: siteName },
+};
+---
+
+<BaseLayout
+  title={`${title} | ${text.printSuffix} | ${siteName}`}
+  description={alt}
+  lang={lang}
+  routeKey='shop'
+  alternates={artworkAlternates(artwork.slug)}
+  image={artwork.images[0].large.src}
+  seoType='article'
+  jsonLd={jsonLd}
+>
+  <div class='mx-auto max-w-6xl px-5 pt-8'>
+    <a
+      href={withBase(shopPath(lang))}
+      class='text-sm font-bold text-blue transition hover:text-pink'
+    >
+      ← {text.backToGallery}
+    </a>
+    <article class='mt-6 grid items-start gap-8 lg:grid-cols-2 lg:gap-12'>
+      <Carousel
+        images={toCarouselImages(artwork.images, 'large')}
+        title={title}
+        alt={alt}
+        lang={lang}
+        variant='large'
+        priority
+      />
+      <div>
+        <h1 class='font-heading text-6xl font-bold leading-[0.9] text-pink'>{title}</h1>
+        <p class='mt-5 whitespace-pre-line leading-relaxed'>{artwork.data.description[lang]}</p>
+        <p class='mt-4 whitespace-pre-line text-xs italic leading-relaxed text-grey'>
+          {text.printNote}
+        </p>
+        <h2 class='mt-8 font-heading text-4xl font-bold text-pink'>
+          {text.formatsHeading}
+        </h2>
+        <div class='mt-2'>
+          <FormatList formats={artwork.data.formats} lang={lang} />
+        </div>
+        <h2 class='mt-8 font-heading text-4xl font-bold text-pink'>
+          {text.orderThisHeading}
+        </h2>
+        <p class='mb-5 mt-2'>{text.orderThisText}</p>
+        <OrderContact lang={lang} artworkTitle={title} />
+      </div>
+    </article>
+  </div>
+</BaseLayout>

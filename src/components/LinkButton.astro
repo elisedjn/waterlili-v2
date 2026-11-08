@@ -1,0 +1,46 @@
+---
+interface Props {
+  href: string;
+  variant?: 'primary' | 'secondary';
+  color?: 'pink' | 'yellow' | 'green' | 'orange' | 'blue';
+  fullWidth?: boolean;
+  openInNewTab?: boolean;
+}
+
+const {
+  href,
+  variant = 'primary',
+  color = 'pink',
+  fullWidth = false,
+  openInNewTab = false,
+} = Astro.props;
+const primaryColors = {
+  pink: 'bg-pink text-white hover:bg-orange',
+  yellow: 'bg-yellow text-white hover:bg-orange',
+  green: 'bg-green text-white hover:bg-blue',
+  orange: 'bg-orange text-white hover:bg-yellow',
+  blue: 'bg-blue text-white hover:bg-green',
+};
+const secondaryColors = {
+  pink: 'border border-pink/35 bg-white/70 text-pink hover:border-pink hover:bg-pink/10',
+  yellow:
+    'border border-yellow/60 bg-white/70 text-grey hover:border-yellow hover:bg-yellow/20',
+  green:
+    'border border-green/60 bg-white/70 text-grey hover:border-green hover:bg-green/20',
+  orange:
+    'border border-orange/60 bg-white/70 text-grey hover:border-orange hover:bg-orange/20',
+  blue: 'border border-blue/60 bg-white/70 text-grey hover:border-blue hover:bg-blue/20',
+};
+---
+
+<a
+  href={href}
+  class:list={[
+    'inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-black uppercase tracking-[0.18em] shadow-sm transition hover:-translate-y-0.5',
+    variant === 'primary' ? primaryColors[color] : secondaryColors[color],
+    fullWidth && 'w-full',
+  ]}
+  target={openInNewTab ? '_blank' : '_self'}
+>
+  <slot />
+</a>

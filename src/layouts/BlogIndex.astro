@@ -1,0 +1,135 @@
+---
+import { getCollection } from 'astro:content';
+import FilterBar from '@components/FilterBar.astro';
+import LinkButton from '@components/LinkButton.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { type Locale } from '@i18n/config';
+import { localizedRoutes, withBase } from '@i18n/routes';
+import { sharedText, siteName, homeContent } from '@i18n/ui';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const intro = {
+  en: 'Ideas for creative workshops, local activities, and slow travel around Ericeira and Santa Cruz.',
+  fr: "Idées d'ateliers créatifs, activités locales et voyage lent autour d'Ericeira et Santa Cruz.",
+  pt: 'Ideias para workshops criativos, atividades locais e viagens tranquilas pela Ericeira e Santa Cruz.',
+}[lang];
+const filterText = {
+  en: { label: 'Tag', empty: 'No articles match these tags yet.' },
+  fr: { label: 'Tag', empty: 'Aucun article ne correspond à ces tags pour le moment.' },
+  pt: { label: 'Tag', empty: 'Ainda não há artigos com estas tags.' },
+}[lang];
+const content = homeContent[lang];
+const posts = (
+  await getCollection('blog', ({ data }) => data.lang === lang && !data.draft)
+).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const allTags = [...new Set(posts.flatMap((post) => post.data.tags))].sort((a, b) =>
+  a.localeCompare(b, lang),
+);
+const filterGroups = [
+  {
+    name: 'tag',
+    label: filterText.label,
+    options: allTags.map((tag) => ({ id: tag, label: tag })),
+  },
+];
+const blogHref = withBase(localizedRoutes.blog[lang]);
+---
+
+<BaseLayout
+  title={`${sharedText[lang].latestPosts} | ${siteName}`}
+  description={intro}
+  lang={lang}
+  routeKey='blog'
+>
+  <section class='mx-auto max-w-6xl px-5 py-20'>
+    <p class='text-sm font-black uppercase tracking-[0.28em] text-blue'>
+      {sharedText[lang].latestPosts}
+    </p>
+    <h1 class='mt-6 font-heading text-6xl leading-[0.88] text-grey md:text-8xl'>
+      {content.blogTitle}
+    </h1>
+    <p class='mt-8 max-w-4xl text-xl leading-9 text-grey/75'>{intro}</p>
+
+    <div class='mt-12'>
+      <FilterBar
+        groups={filterGroups}
+        clearLabel={sharedText[lang].filterClearAll}
+        removeLabel={sharedText[lang].filterRemove}
+      />
+    </div>
+
+    <div id='blog-posts-grid' class='grid gap-5 md:grid-cols-2'>
+      {
+        posts.map((post) => {
+          const href = withBase(`${localizedRoutes.blog[lang]}${post.data.slug}/`);
+
+          return (
+            <article
+              class='overflow-hidden rounded-[2rem] border border-grey/10 bg-white/75 shadow-sm transition hover:-translate-y-1 hover:shadow-xl'
+              data-filter-item
+              data-filter-tag={post.data.tags.join('|')}
+            >
+              <a href={href} class='block group'>
+                {post.data.image ? (
+                  <img
+                    src={withBase(post.data.image)}
+                    alt={post.data.title}
+                    width='1200'
+                    height='800'
+                    class='h-56 w-full object-cover transition group-hover:scale-[1.02]'
+                    loading='lazy'
+                    decoding='async'
+                  />
+                ) : (
+                  <div class='h-56 bg-pink/25 p-6'>
+                    <div class='grid h-full place-items-center rounded-[1.5rem] bg-white/45'>
+                      <p class='font-heading text-5xl font-bold leading-none text-pink'>
+                        {post.data.title}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                <div class='p-6 pb-0'>
+                  <p class='text-xs font-black uppercase tracking-[0.22em] text-blue'>
+                    {post.data.date.toLocaleDateString(lang, {
+                      month: 'long',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}
+                  </p>
+                  <h2 class='mt-5 font-heading text-4xl leading-none text-grey transition group-hover:text-pink'>
+                    {post.data.title}
+                  </h2>
+                  <p class='mt-4 text-grey/70'>{post.data.description}</p>
+                </div>
+              </a>
+              <div class='p-6'>
+                <div class='flex flex-wrap gap-2'>
+                  {post.data.tags.map((tag) => (
+                    <a
+                      href={`${blogHref}?tag=${encodeURIComponent(tag)}`}
+                      class='rounded-full bg-yellow/30 px-3 py-1 text-xs font-bold text-grey/75 transition hover:bg-yellow hover:text-white'
+                    >
+                      {tag}
+                    </a>
+                  ))}
+                </div>
+                <div class='mt-7'>
+                  <LinkButton href={href}>{sharedText[lang].readMore}</LinkButton>
+                </div>
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+    <p data-filter-empty hidden class='mt-10 text-center font-bold text-grey/70'>
+      {filterText.empty}
+    </p>
+  </section>
+
+</BaseLayout>

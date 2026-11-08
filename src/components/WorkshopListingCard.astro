@@ -1,0 +1,153 @@
+---
+import Card from '@components/Card.astro';
+import Carousel from '@components/Carousel.astro';
+import LinkButton from '@components/LinkButton.astro';
+import Tag from '@components/Tag.astro';
+import { locationInfo } from '@config/locations';
+import type { CollectionEntry } from 'astro:content';
+import { type Locale } from '@i18n/config';
+import { withBase } from '@i18n/routes';
+import { getWorkshopPath } from '@i18n/workshops';
+import { sharedText } from '@i18n/ui';
+import { getBookingHref } from '@utils/booking';
+
+interface Props {
+  workshop: CollectionEntry<'workshops'>;
+  lang: Locale;
+  showActions?: boolean;
+}
+
+const { workshop, lang, showActions = true } = Astro.props;
+const bookingUrl = getBookingHref(workshop.data.bookingUrl, workshop.data.bookingMessage);
+const detailPath = getWorkshopPath(lang, workshop.data.slug);
+const location = locationInfo[workshop.data.location];
+const images = workshop.data.images.map((src) => ({ src }));
+const labels = {
+  en: {
+    date: 'Date & Time',
+    duration: 'Duration',
+    price: 'Price',
+    place: 'Place',
+  },
+  fr: {
+    date: 'Date et heure',
+    duration: 'Durée',
+    price: 'Prix',
+    place: 'Lieu',
+  },
+  pt: {
+    date: 'Data e hora',
+    duration: 'Duração',
+    price: 'Preço',
+    place: 'Local',
+  },
+}[lang];
+---
+
+<Card variant='outline'>
+  <div class='grid gap-0 lg:grid-cols-[0.78fr_1.22fr]'>
+    <div class='relative min-h-64 overflow-hidden bg-pink/25'>
+      <Carousel images={images} title={workshop.data.title} lang={lang} variant='fill' />
+      <Tag color={location.color} class='absolute left-4 top-4 z-10'>{location.label}</Tag>
+      {
+        workshop.data.price && (
+          <div class='absolute right-4 bottom-4 z-10 grid size-20 place-items-center rounded-full bg-yellow/95 p-4 text-center shadow-xl shadow-grey/15 lg:hidden'>
+            <div>
+              <p class='mt-1 font-bold leading-tight text-white'>{workshop.data.price}</p>
+              {workshop.data.priceDetails && (
+                <p class='mt-1 text-[0.58rem] leading-tight text-white'>
+                  {workshop.data.priceDetails}
+                </p>
+              )}
+            </div>
+          </div>
+        )
+      }
+    </div>
+    <div class='p-6 md:p-8'>
+      <h2 class='font-heading text-4xl font-bold leading-[0.85] text-pink'>
+        {workshop.data.title}
+      </h2>
+      <p class='mt-4 text-sm text-grey/75'>
+        {workshop.data.description}
+      </p>
+      <dl class='mt-6 grid grid-cols-2 gap-3 lg:grid-cols-2'>
+        <div
+          class:list={[
+            'rounded-2xl bg-yellow/30 p-4',
+            workshop.data.duration ? '' : 'col-span-2 lg:col-span-1',
+          ]}
+        >
+          <dt class='text-xs font-black uppercase tracking-[0.18em] text-pink'>
+            {labels.date}
+          </dt>
+          <dd class='mt-1 text-grey'>
+            <span class='block'>{workshop.data.date}</span>
+            {
+              workshop.data.time && (
+                <span class='mt-1 block text-sm text-grey/70'>{workshop.data.time}</span>
+              )
+            }
+          </dd>
+        </div>
+        {
+          workshop.data.duration && (
+            <div class='rounded-2xl bg-blue/20 p-4'>
+              <dt class='text-xs font-black uppercase tracking-[0.18em] text-pink'>
+                {labels.duration}
+              </dt>
+              <dd class='mt-1 text-grey'>
+                <span class='block'>{workshop.data.duration}</span>
+                {workshop.data.durationDetails && <span class='mt-1 block text-sm text-grey/70'>{workshop.data.durationDetails}</span>}
+              </dd>
+            </div>
+          )
+        }
+        {
+          workshop.data.price && (
+            <div class='hidden rounded-2xl bg-green/25 p-4 lg:block'>
+              <dt class='text-xs font-black uppercase tracking-[0.18em] text-pink'>
+                {labels.price}
+              </dt>
+              <dd class='mt-1 text-grey'>
+                <span class='block'>{workshop.data.price}</span>
+                {workshop.data.priceDetails && (
+                  <span class='mt-1 block text-sm text-grey/70'>
+                    {workshop.data.priceDetails}
+                  </span>
+                )}
+              </dd>
+            </div>
+          )
+        }
+        {
+          workshop.data.place && (
+            <div class='col-span-2 rounded-2xl bg-orange/25 p-4 lg:col-span-1'>
+              <dt class='text-xs font-black uppercase tracking-[0.18em] text-pink'>
+                {labels.place}
+              </dt>
+              <dd class='mt-1 text-grey'>
+                <span class='block'>{workshop.data.place}</span>
+                {workshop.data.address && (
+                  <span class='mt-1 block whitespace-pre-line text-sm text-grey/70'>
+                    {workshop.data.address}
+                  </span>
+                )}
+              </dd>
+            </div>
+          )
+        }
+      </dl>
+      {
+        showActions && (
+          <div class='mt-7 flex flex-wrap gap-3'>
+            <LinkButton href={withBase(detailPath)} variant='secondary'>
+              {sharedText[lang].workshopDetails}
+            </LinkButton>
+            <LinkButton href={bookingUrl}>{sharedText[lang].bookCta}</LinkButton>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</Card>

@@ -1,0 +1,35 @@
+---
+import { languageLabels, languageNames, locales, type Locale } from '@i18n/config';
+import { withBase } from '@i18n/routes';
+import { sharedText } from '@i18n/ui';
+
+interface Props {
+  currentLocale: Locale;
+  alternates: Record<Locale, string>;
+}
+
+const { currentLocale, alternates } = Astro.props;
+---
+
+<nav
+  aria-label={sharedText[currentLocale].language}
+  class='flex items-center gap-1 rounded-full border border-pink/20 bg-white/70 p-1 shadow-sm'
+>
+  {
+    locales.map((locale) => (
+      <a
+        href={withBase(alternates[locale])}
+        class:list={[
+          'rounded-full px-3 py-1 text-xs font-bold tracking-[0.22em] transition',
+          locale === currentLocale
+            ? 'bg-pink text-white'
+            : 'text-grey/70 hover:bg-blue/20 hover:text-blue',
+        ]}
+        aria-current={locale === currentLocale ? 'page' : undefined}
+        title={languageNames[locale]}
+      >
+        {languageLabels[locale]}
+      </a>
+    ))
+  }
+</nav>

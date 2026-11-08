@@ -1,0 +1,16 @@
+---
+import ArtworkPage from '@layouts/ArtworkPage.astro';
+import { getArtworkStaticPaths, type Artwork } from '@utils/artworks';
+
+export function getStaticPaths() {
+  return getArtworkStaticPaths();
+}
+
+interface Props {
+  artwork: Artwork;
+}
+
+const { artwork } = Astro.props;
+---
+
+<ArtworkPage artwork={artwork} lang='en' />

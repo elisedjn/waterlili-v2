@@ -1,0 +1,167 @@
+---
+import Icon from '@components/Icon.astro';
+
+export interface FilterGroup {
+  /** Used for the data attribute on items (data-filter-<name>) and the URL parameter (?<name>=...). */
+  name: string;
+  label: string;
+  options: { id: string; label: string }[];
+}
+
+interface Props {
+  groups: FilterGroup[];
+  clearLabel: string;
+  removeLabel: string;
+}
+
+const { groups, clearLabel, removeLabel } = Astro.props;
+const triggerClass =
+  'flex cursor-pointer list-none items-center gap-2 rounded-full border border-pink/40 bg-white/75 px-4 py-1.5 text-sm font-bold text-grey transition hover:border-pink hover:text-pink group-open:border-pink group-open:text-pink [&::-webkit-details-marker]:hidden';
+---
+
+{
+  groups.length > 0 && (
+    <section
+      data-filters
+      data-remove-label={removeLabel}
+      hidden
+      class='mx-auto mb-8 max-w-6xl flex-wrap items-center gap-3 px-5 [&:not([hidden])]:flex'
+    >
+      {groups.map((group) => (
+        <details data-filter-group={group.name} class='group relative'>
+          <summary class={triggerClass}>
+            {group.label}
+            <Icon
+              name='chevron-right'
+              class='size-3 rotate-90 transition group-open:-rotate-90'
+            />
+          </summary>
+          <div class='absolute left-0 top-full z-20 mt-2 max-h-80 min-w-56 overflow-y-auto rounded-2xl border border-pink/20 bg-white p-2 shadow-lg'>
+            {group.options.map((option) => (
+              <label class='flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2 text-sm hover:bg-pink/10'>
+                <input
+                  type='checkbox'
+                  value={option.id}
+                  data-filter-option
+                  class='size-4 accent-pink'
+                />
+                <span>{option.label}</span>
+              </label>
+            ))}
+          </div>
+        </details>
+      ))}
+      <ul data-filter-chips class='flex flex-wrap items-center gap-2' />
+      <button
+        type='button'
+        data-filter-clear
+        hidden
+        class='text-sm font-bold text-blue underline transition hover:text-pink'
+      >
+        {clearLabel}
+      </button>
+    </section>
+  )
+}
+
+<script>
+  // Progressive enhancement: the bar stays hidden (and every item visible) without JavaScript.
+  // Items carry `data-filter-<group>="value1|value2"`, and must have `data-filter-item`.
+  // Within one group the choices add up (A OR B); between groups they narrow down (AND).
+  // The selection is kept in the URL (?tag=a&tag=b) so a filtered view can be shared.
+  const filters = document.querySelector<HTMLElement>('[data-filters]');
+
+  if (filters) {
+    const items = [...document.querySelectorAll<HTMLElement>('[data-filter-item]')];
+    const empty = document.querySelector<HTMLElement>('[data-filter-empty]');
+    const groups = [...filters.querySelectorAll<HTMLDetailsElement>('[data-filter-group]')];
+    const chips = filters.querySelector<HTMLElement>('[data-filter-chips]')!;
+    const clearButton = filters.querySelector<HTMLButtonElement>('[data-filter-clear]')!;
+    const removeLabel = filters.dataset.removeLabel ?? '';
+    const checkboxes = () => [
+      ...filters.querySelectorAll<HTMLInputElement>('[data-filter-option]'),
+    ];
+    const groupName = (checkbox: HTMLInputElement) =>
+      checkbox.closest<HTMLElement>('[data-filter-group]')?.dataset.filterGroup ?? '';
+
+    const render = (checked: HTMLInputElement[]) => {
+      chips.replaceChildren(
+        ...checked.map((checkbox) => {
+          const label = checkbox.nextElementSibling?.textContent ?? checkbox.value;
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className =
+            'inline-flex items-center gap-2 rounded-full bg-pink px-3 py-1 text-sm font-bold text-white transition hover:bg-pink/80';
+          chip.setAttribute('aria-label', `${removeLabel}: ${label}`);
+          chip.textContent = label;
+          const cross = document.createElement('span');
+          cross.setAttribute('aria-hidden', 'true');
+          cross.textContent = '×';
+          chip.append(cross);
+          chip.addEventListener('click', () => {
+            checkbox.checked = false;
+            apply();
+          });
+          return chip;
+        }),
+      );
+      clearButton.hidden = checked.length < 2;
+    };
+
+    const apply = () => {
+      const checked = checkboxes().filter((checkbox) => checkbox.checked);
+      let visible = 0;
+
+      items.forEach((item) => {
+        const matches = groups.every((group) => {
+          const name = group.dataset.filterGroup ?? '';
+          const selected = checked
+            .filter((checkbox) => groupName(checkbox) === name)
+            .map((checkbox) => checkbox.value);
+          if (selected.length === 0) return true;
+          const values = (item.getAttribute(`data-filter-${name}`) ?? '').split('|');
+          return selected.some((value) => values.includes(value));
+        });
+        item.hidden = !matches;
+        if (matches) visible += 1;
+      });
+
+      if (empty) empty.hidden = visible > 0;
+
+      const params = new URLSearchParams();
+      checked.forEach((checkbox) => params.append(groupName(checkbox), checkbox.value));
+      const query = params.toString();
+      history.replaceState(
+        null,
+        '',
+        `${window.location.pathname}${query ? `?${query}` : ''}`,
+      );
+
+      render(checked);
+    };
+
+    // Restore a selection from the URL (also used by the tag links on blog cards).
+    const initial = new URLSearchParams(window.location.search);
+    checkboxes().forEach((checkbox) => {
+      checkbox.checked = initial.getAll(groupName(checkbox)).includes(checkbox.value);
+      checkbox.addEventListener('change', apply);
+    });
+    clearButton.addEventListener('click', () => {
+      checkboxes().forEach((checkbox) => (checkbox.checked = false));
+      apply();
+    });
+
+    // Close an open dropdown when clicking elsewhere or pressing Escape.
+    document.addEventListener('click', (event) => {
+      groups.forEach((group) => {
+        if (!group.contains(event.target as Node)) group.open = false;
+      });
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') groups.forEach((group) => (group.open = false));
+    });
+
+    filters.hidden = false;
+    apply();
+  }
+</script>

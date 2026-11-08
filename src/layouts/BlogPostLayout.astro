@@ -1,0 +1,92 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { type Locale } from '@i18n/config';
+import { localizedRoutes, withBase } from '@i18n/routes';
+import { sharedText, siteName } from '@i18n/ui';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  Content: any;
+}
+
+const { post, Content } = Astro.props;
+const lang = post.data.lang as Locale;
+const canonicalPath = `${localizedRoutes.blog[lang]}${post.data.slug}/`;
+const canonicalUrl = new URL(withBase(canonicalPath), Astro.site).toString();
+const imageUrl = post.data.image
+  ? new URL(withBase(post.data.image), Astro.site).toString()
+  : undefined;
+const seoAlternates = { [lang]: canonicalPath };
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.date.toISOString(),
+  dateModified: post.data.date.toISOString(),
+  inLanguage: lang,
+  url: canonicalUrl,
+  image: imageUrl,
+  keywords: post.data.tags,
+  author: {
+    '@type': 'Organization',
+    name: siteName,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: siteName,
+  },
+};
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  lang={lang}
+  routeKey='blog'
+  canonicalPath={canonicalPath}
+  seoType='article'
+  seoAlternates={seoAlternates}
+  image={post.data.image}
+  jsonLd={articleSchema}
+>
+  <article class='mx-auto max-w-3xl px-5 py-16'>
+    <a
+      href={withBase(localizedRoutes.blog[lang])}
+      class='text-sm font-black uppercase tracking-[0.18em] text-grey/55 transition hover:text-pink'
+    >
+      ← {sharedText[lang].latestPosts}
+    </a>
+    <header class='mt-10'>
+      <p class='text-sm font-bold uppercase tracking-[0.22em] text-blue'>
+        {
+          post.data.date.toLocaleDateString(lang, {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+          })
+        }
+      </p>
+      <h1 class='mt-5 font-heading text-6xl leading-[0.9] text-grey md:text-7xl'>
+        {post.data.title}
+      </h1>
+      <p class='mt-6 text-xl leading-8 text-grey/75'>{post.data.description}</p>
+    </header>
+    {
+      post.data.image && (
+        <img
+          src={withBase(post.data.image)}
+          alt={post.data.title}
+          width='1200'
+          height='800'
+          decoding='async'
+          class='mt-10 aspect-[16/10] w-full rounded-[2rem] object-cover shadow-xl shadow-pink/15'
+        />
+      )
+    }
+    <div class='prose-blog mt-12 border-t border-grey/10 pt-10'>
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

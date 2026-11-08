@@ -1,0 +1,173 @@
+---
+import Icon from '@components/Icon.astro';
+import LanguageSwitcher from '@components/LanguageSwitcher.astro';
+import { type Locale, type RouteKey } from '@i18n/config';
+import { localizedRoutes, withBase } from '@i18n/routes';
+import { navLabels } from '@i18n/ui';
+
+interface Props {
+  lang: Locale;
+  currentRoute: RouteKey;
+  alternates?: Record<Locale, string>;
+}
+
+const { lang, currentRoute, alternates: pageAlternates } = Astro.props;
+const navItems: RouteKey[] = ['workshops', 'shop', 'blog'];
+const alternates = pageAlternates ?? localizedRoutes[currentRoute];
+const menuLabels: Record<Locale, { open: string; close: string }> = {
+  en: { open: 'Open menu', close: 'Close menu' },
+  fr: { open: 'Ouvrir le menu', close: 'Fermer le menu' },
+  pt: { open: 'Abrir menu', close: 'Fechar menu' },
+};
+---
+
+<header class='sticky top-0 z-20 border-b border-pink/20 bg-white/85 backdrop-blur-xl'>
+  <div class='mx-auto flex max-w-6xl items-center justify-between gap-5 px-5 py-4'>
+    <a href={withBase(localizedRoutes.home[lang])} class='group inline-flex items-center'>
+      <img
+        src={withBase('/images/waterlili-creation-logo.png')}
+        alt='Waterlili Creation'
+        width='480'
+        height='180'
+        decoding='async'
+        class='h-14 w-auto transition group-hover:-rotate-1 group-hover:scale-[1.02] md:h-16'
+      />
+    </a>
+    <div class='hidden items-center gap-7 lg:flex'>
+      <nav aria-label='Main navigation' class='flex items-center gap-6'>
+        <a
+          href={withBase(localizedRoutes.home[lang])}
+          class:list={[
+            'grid size-8 place-items-center transition hover:text-blue',
+            currentRoute === 'home' ? 'text-pink' : 'text-grey/65',
+          ]}
+          aria-current={currentRoute === 'home' ? 'page' : undefined}
+          aria-label={navLabels[lang].home}
+          title={navLabels[lang].home}
+        >
+          <Icon name='home' class='size-5' />
+        </a>
+        {
+          navItems.map((item) => (
+            <a
+              href={withBase(localizedRoutes[item][lang])}
+              class:list={[
+                'text-sm font-bold uppercase tracking-[0.18em] transition hover:text-blue',
+                currentRoute === item ? 'text-pink' : 'text-grey/65',
+              ]}
+              aria-current={currentRoute === item ? 'page' : undefined}
+            >
+              {navLabels[lang][item]}
+            </a>
+          ))
+        }
+      </nav>
+      <LanguageSwitcher currentLocale={lang} alternates={alternates} />
+    </div>
+    <div class='flex items-center gap-3 lg:hidden'>
+      <LanguageSwitcher currentLocale={lang} alternates={alternates} />
+      <button
+        type='button'
+        id='mobile-menu-button'
+        data-mobile-menu-button
+        data-open-label={menuLabels[lang].open}
+        data-close-label={menuLabels[lang].close}
+        class='grid size-11 place-items-center rounded-full border border-pink/20 bg-white/70 text-grey/75 shadow-sm transition hover:bg-blue/20 hover:text-blue'
+        aria-controls='mobile-menu'
+        aria-expanded='false'
+        aria-label={menuLabels[lang].open}
+      >
+        <Icon name='menu' class='size-5' data-menu-icon-open />
+        <Icon name='close' class='hidden size-5' data-menu-icon-close />
+      </button>
+    </div>
+  </div>
+  <div
+    id='mobile-menu'
+    data-mobile-menu
+    hidden
+    class='border-t border-pink/15 bg-white/95 shadow-lg shadow-pink/10 backdrop-blur-xl lg:hidden'
+  >
+    <nav aria-label='Mobile navigation' class='mx-auto grid max-w-6xl gap-2 px-5 py-4'>
+      <a
+        href={withBase(localizedRoutes.home[lang])}
+        class:list={[
+          'flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold uppercase tracking-[0.12em] transition',
+          currentRoute === 'home'
+            ? 'bg-pink text-white'
+            : 'bg-white/70 text-grey/75 hover:bg-blue/20 hover:text-blue',
+        ]}
+        aria-current={currentRoute === 'home' ? 'page' : undefined}
+      >
+        <Icon name='home' class='size-5 shrink-0' />
+        <span>{navLabels[lang].home}</span>
+      </a>
+      {
+        navItems.map((item) => (
+          <a
+            href={withBase(localizedRoutes[item][lang])}
+            class:list={[
+              'rounded-2xl px-4 py-3 text-sm font-bold uppercase tracking-[0.12em] transition',
+              currentRoute === item
+                ? 'bg-pink text-white'
+                : 'bg-white/70 text-grey/75 hover:bg-blue/20 hover:text-blue',
+            ]}
+            aria-current={currentRoute === item ? 'page' : undefined}
+          >
+            {navLabels[lang][item]}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>
+
+<script>
+  const setupMobileMenu = () => {
+    const button = document.querySelector('[data-mobile-menu-button]');
+    const menu = document.querySelector('[data-mobile-menu]');
+
+    if (!(button instanceof HTMLButtonElement) || !(menu instanceof HTMLElement)) {
+      return;
+    }
+
+    const openIcon = button.querySelector('[data-menu-icon-open]');
+    const closeIcon = button.querySelector('[data-menu-icon-close]');
+
+    const setMenuOpen = (isOpen: boolean) => {
+      button.setAttribute('aria-expanded', String(isOpen));
+      button.setAttribute(
+        'aria-label',
+        isOpen ? button.dataset.closeLabel ?? 'Close menu' : button.dataset.openLabel ?? 'Open menu',
+      );
+      menu.hidden = !isOpen;
+      openIcon?.classList.toggle('hidden', isOpen);
+      closeIcon?.classList.toggle('hidden', !isOpen);
+    };
+
+    button.addEventListener('click', () => {
+      setMenuOpen(button.getAttribute('aria-expanded') !== 'true');
+    });
+
+    document.addEventListener('click', (event) => {
+      const target = event.target;
+
+      if (
+        button.getAttribute('aria-expanded') === 'true' &&
+        target instanceof Node &&
+        !button.contains(target) &&
+        !menu.contains(target)
+      ) {
+        setMenuOpen(false);
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
+      }
+    });
+  };
+
+  setupMobileMenu();
+</script>

@@ -1,0 +1,32 @@
+---
+import { withBase } from '@i18n/routes';
+
+type IconName =
+  | 'chevron-left'
+  | 'chevron-right'
+  | 'close'
+  | 'email'
+  | 'facebook'
+  | 'home'
+  | 'instagram'
+  | 'kofi'
+  | 'menu'
+  | 'whatsapp';
+
+interface Props {
+  name: IconName;
+  class?: string;
+  [attribute: string]: unknown;
+}
+
+const { name, class: className = 'size-5', ...attrs } = Astro.props;
+const iconMaskClass =
+  'block bg-current [mask-image:var(--icon-url)] [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain] [-webkit-mask-image:var(--icon-url)] [-webkit-mask-position:center] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:contain]';
+---
+
+<span
+  {...attrs}
+  aria-hidden='true'
+  class:list={[className, iconMaskClass]}
+  style={`--icon-url: url('${withBase(`/icons/${name}.svg`)}')`}
+></span>

@@ -1,0 +1,125 @@
+---
+import LinkButton from '@components/LinkButton.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { contactLinks } from '@config/contact';
+import { type Locale } from '@i18n/config';
+import { withBase } from '@i18n/routes';
+import { atHomeDetails, sharedText, siteName, workshopContent } from '@i18n/ui';
+import { getBookingHref } from '../utils/booking';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const content = workshopContent.atHome[lang];
+const details = atHomeDetails[lang];
+const contactHref = getBookingHref(contactLinks.whatsapp, contactLinks.whatsappMessage);
+---
+
+<BaseLayout
+  title={`${content.seoTitle} | ${siteName}`}
+  description={content.seoDescription}
+  lang={lang}
+  routeKey='atHome'
+>
+  <section class='p-5 md:py-12'>
+    <div class='mx-auto grid max-w-6xl gap-12'>
+      <div class='rounded-[2.5rem] bg-white/75 p-8 shadow-sm md:p-12'>
+        <div>
+          <p class='text-sm font-black uppercase tracking-[0.28em] text-blue'>
+            {content.eyebrow}
+          </p>
+          <h1
+            class='mt-6 font-heading text-6xl font-bold leading-[0.88] tracking-tight text-pink md:text-8xl'
+          >
+            {content.title}
+          </h1>
+          <p class='my-8 max-w-4xl text-xl leading-9 text-grey/75'>
+            {content.intro}
+          </p>
+          <div class='mt-9 hidden flex-wrap gap-4 md:flex'>
+            <LinkButton href={contactHref}>{sharedText[lang].contactCta}</LinkButton>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class='p-5'>
+    <div class='mx-auto max-w-6xl'>
+      <p class='text-sm pb-4 font-black uppercase tracking-[0.28em] text-blue'>
+        {details.offerTitle}
+      </p>
+      <div
+        class='-mx-5 mt-4 flex gap-5 overflow-x-auto px-5 pb-4 snap-x snap-mandatory sm:mx-0 sm:grid sm:grid-cols-3 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-5'
+      >
+        {
+          details.workshops.map((workshop) => (
+            <article class='w-36 shrink-0 snap-start text-center sm:w-auto'>
+              <div class='relative mx-auto aspect-square w-32 overflow-hidden rounded-full border-4 border-white shadow-xl shadow-pink/15 sm:w-40 lg:w-44'>
+                <img
+                  src={withBase(workshop.image)}
+                  alt={workshop.name}
+                  width='450'
+                  height='450'
+                  class='h-full w-full object-cover'
+                  loading='lazy'
+                  decoding='async'
+                />
+              </div>
+              <h3 class='mt-3 font-heading text-3xl font-bold leading-none text-pink sm:text-4xl'>
+                {workshop.name}
+              </h3>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class='px-5 pb-10'>
+    <div class='mx-auto max-w-6xl rounded-[2.5rem] bg-white/75 p-8 shadow-sm md:p-12'>
+      <p class='text-sm font-black uppercase tracking-[0.24em] text-green'>
+        {details.faqTitle}
+      </p>
+      <h2 class='mt-4 font-heading text-6xl font-bold leading-none text-pink md:text-7xl'>
+        {details.faqIntro}
+      </h2>
+      <div class='mt-8 grid gap-4'>
+        {
+          details.faqItems.map((item, index) => {
+            const colors = [
+              'bg-yellow/35',
+              'bg-blue/20',
+              'bg-green/25',
+              'bg-orange/25',
+              'bg-pink/15',
+              'bg-yellow/35',
+            ];
+
+            return (
+              <details
+                class:list={['group rounded-[1.5rem] p-5 open:shadow-sm', colors[index]]}
+              >
+                <summary class='flex cursor-pointer list-none items-center justify-between gap-4 font-bold text-grey'>
+                  <span>{item.question}</span>
+                  <span class='grid size-8 shrink-0 place-items-center rounded-full bg-white/70 text-pink transition group-open:rotate-45'>
+                    +
+                  </span>
+                </summary>
+                <p class='mt-4 max-w-3xl text-grey/75'>{item.answer}</p>
+              </details>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+
+  <div
+    class='fixed inset-x-0 bottom-0 z-50 border-t border-pink/20 bg-white/90 px-5 py-4 shadow-[0_-1rem_3rem_rgb(83_84_85/0.12)] backdrop-blur-xl md:hidden'
+  >
+    <LinkButton fullWidth href={contactHref}>{sharedText[lang].contactCta}</LinkButton>
+  </div>
+</BaseLayout>

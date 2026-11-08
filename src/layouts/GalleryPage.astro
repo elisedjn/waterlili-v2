@@ -1,0 +1,87 @@
+---
+import ArtworkCard from '@components/ArtworkCard.astro';
+import FilterBar from '@components/FilterBar.astro';
+import OrderContact from '@components/OrderContact.astro';
+import { type Locale } from '@i18n/config';
+import { localizedRoutes } from '@i18n/routes';
+import { sharedText } from '@i18n/ui';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getArtworks } from '@utils/artworks';
+import { artworkTags, artworkTagIds } from '@config/artwork-tags';
+import { printFormats, printFormatIds } from '@config/print-formats';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const text = sharedText[lang];
+const artworks = await getArtworks();
+// Only offer filters that at least one artwork uses.
+const usedFormats = printFormatIds.filter((id) =>
+  artworks.some((artwork) => artwork.data.formats.includes(id)),
+);
+const usedTags = artworkTagIds.filter((id) =>
+  artworks.some((artwork) => artwork.data.tags.includes(id)),
+);
+const filterGroups = [
+  {
+    name: 'format',
+    label: text.filterFormat,
+    options: usedFormats.map((id) => ({ id, label: printFormats[id].label[lang] })),
+  },
+  {
+    name: 'tag',
+    label: text.filterTheme,
+    options: usedTags.map((id) => ({ id, label: artworkTags[id][lang] })),
+  },
+].filter((group) => group.options.length > 0);
+---
+
+<BaseLayout
+  routeKey='shop'
+  title={text.galleryMetaTitle}
+  description={text.galleryIntro}
+  lang={lang}
+  alternates={localizedRoutes.shop}
+  image={artworks[0]?.images[0]?.large.src}
+>
+  <section class='mx-auto max-w-6xl px-5 pb-10 pt-12 md:pt-16'>
+    <h1 class='font-heading text-6xl font-bold leading-[0.9] text-pink md:text-7xl'>
+      {text.galleryTitle}
+    </h1>
+    <p class='mt-4 max-w-2xl text-lg'>{text.galleryIntro}</p>
+  </section>
+
+  <FilterBar groups={filterGroups} clearLabel={text.filterClearAll} removeLabel={text.filterRemove} />
+
+  <section
+    data-artwork-grid
+    class='mx-auto grid max-w-6xl gap-8 px-5 sm:grid-cols-2 lg:grid-cols-3'
+  >
+    {
+      artworks.map((artwork, index) => (
+        <div
+          data-filter-item
+          data-filter-format={artwork.data.formats.join('|')}
+          data-filter-tag={artwork.data.tags.join('|')}
+        >
+          <ArtworkCard artwork={artwork} lang={lang} priority={index < 3} />
+        </div>
+      ))
+    }
+  </section>
+  <p data-filter-empty hidden class='mx-auto max-w-6xl px-5 text-center text-lg'>
+    {text.filterNoResults}
+  </p>
+
+  <section class='mx-auto mt-16 max-w-6xl px-5'>
+    <div class='rounded-[2rem] border border-pink/20 bg-white/75 p-6 md:p-10'>
+      <h2 class='font-heading text-5xl font-bold leading-none text-pink'>
+        {text.howToOrderHeading}
+      </h2>
+      <p class='mb-6 mt-3 max-w-2xl'>{text.howToOrderText}</p>
+      <OrderContact lang={lang} />
+    </div>
+  </section>
+</BaseLayout>

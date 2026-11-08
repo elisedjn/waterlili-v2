@@ -1,0 +1,200 @@
+---
+import Icon from '@components/Icon.astro';
+import { type Locale } from '@i18n/config';
+import { withBase } from '@i18n/routes';
+import { sharedText } from '@i18n/ui';
+import type { CarouselImage } from '@utils/carousel';
+
+interface Props {
+  images: CarouselImage[];
+  title: string;
+  /** Description of the picture, used as alt text. Falls back to the title. */
+  alt?: string;
+  lang: Locale;
+  /**
+   * card:  portrait print card, dots below the image
+   * large: big square-ish image (detail page), dots below the image
+   * fill:  fills its (positioned) parent, dots overlaid on the image
+   * wide:  16/9 banner (workshop detail), dots overlaid on the image
+   */
+  variant?: 'card' | 'large' | 'fill' | 'wide';
+  href?: string;
+  priority?: boolean;
+  /** Blocks right click / drag on the images (used for artworks). */
+  protect?: boolean;
+  sizes?: string;
+}
+
+const {
+  images,
+  title,
+  alt,
+  lang,
+  variant = 'card',
+  href,
+  priority = false,
+  protect = variant !== 'fill',
+  sizes,
+} = Astro.props;
+const text = sharedText[lang];
+const imageAlt = alt ?? title;
+const isLarge = variant === 'large';
+const isFill = variant === 'fill';
+const overlayDots = isFill || variant === 'wide';
+const hasMany = images.length > 1;
+const SlideContent = href ? 'a' : 'div';
+const arrowClass =
+  'absolute top-1/2 z-10 grid -translate-y-1/2 place-items-center rounded-full bg-white/85 text-grey shadow-sm transition hover:bg-pink hover:text-white';
+const arrowSize = isLarge ? 'size-11' : 'size-9';
+const trackClass = {
+  card: 'aspect-[210/297]',
+  large: 'aspect-[4/5] rounded-[2rem] lg:aspect-square',
+  fill: 'absolute inset-0',
+  wide: 'aspect-[16/9] rounded-t-[2.1rem]',
+}[variant];
+---
+
+<div data-carousel class:list={[isFill ? 'absolute inset-0' : 'relative']}>
+  <div
+    data-track
+    class:list={[
+      'carousel-track flex snap-x snap-mandatory overflow-x-auto bg-paper',
+      trackClass,
+    ]}
+  >
+    {
+      images.map((image, index) => {
+        const isFirst = index === 0;
+
+        return (
+          <div class='relative w-full shrink-0 snap-start snap-always'>
+            <SlideContent
+              href={href}
+              tabindex={href ? -1 : undefined}
+              draggable={href ? 'false' : undefined}
+              class:list={['absolute inset-0 block', isLarge && 'p-4 md:p-6']}
+            >
+              <img
+                src={withBase(image.src)}
+                srcset={image.srcset
+                  ?.map((entry) => `${withBase(entry.src)} ${entry.width}w`)
+                  .join(', ')}
+                sizes={
+                  image.srcset ? (sizes ?? '(min-width: 1024px) 50vw, 100vw') : undefined
+                }
+                alt={hasMany ? `${imageAlt} (${index + 1}/${images.length})` : imageAlt}
+                width={image.width}
+                height={image.height}
+                loading={isFirst && priority ? 'eager' : 'lazy'}
+                fetchpriority={isFirst && priority ? 'high' : undefined}
+                decoding='async'
+                draggable='false'
+                class:list={[
+                  'h-full w-full',
+                  protect && 'artwork-image',
+                  isLarge ? 'object-contain' : 'object-cover',
+                ]}
+              />
+            </SlideContent>
+          </div>
+        );
+      })
+    }
+  </div>
+  {!hasMany && variant === 'card' && <div class='h-8' />}
+  {
+    hasMany && (
+      <>
+        <button
+          type='button'
+          data-previous
+          aria-label={text.previousImage}
+          class:list={[arrowClass, arrowSize, 'left-2']}
+        >
+          <Icon name='chevron-left' class='size-4' />
+        </button>
+        <button
+          type='button'
+          data-next
+          aria-label={text.nextImage}
+          class:list={[arrowClass, arrowSize, 'right-2']}
+        >
+          <Icon name='chevron-right' class='size-4' />
+        </button>
+        <div
+          class:list={[
+            'flex justify-center',
+            overlayDots ? 'absolute inset-x-0 bottom-1 z-10 [&_span]:shadow-sm' : 'py-1',
+          ]}
+        >
+          {images.map((_, index) => (
+            <button
+              type='button'
+              data-dot
+              aria-label={`${text.showImage} ${index + 1}`}
+              aria-current={index === 0 ? 'true' : undefined}
+              class='group/dot grid size-6 place-items-center'
+            >
+              <span class='block size-2 rounded-full bg-pink/30 transition group-aria-[current]/dot:bg-pink' />
+            </button>
+          ))}
+        </div>
+      </>
+    )
+  }
+</div>
+
+<script>
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((carousel) => {
+    const track = carousel.querySelector<HTMLElement>('[data-track]');
+    const dots = [...carousel.querySelectorAll<HTMLElement>('[data-dot]')];
+
+    if (!track || dots.length === 0) {
+      return;
+    }
+
+    const currentIndex = () => Math.round(track.scrollLeft / track.clientWidth);
+
+    const goTo = (index: number) => {
+      const wrapped = (index + dots.length) % dots.length;
+      track.scrollTo({
+        left: wrapped * track.clientWidth,
+        behavior: reducedMotion.matches ? 'auto' : 'smooth',
+      });
+    };
+
+    carousel
+      .querySelector('[data-previous]')
+      ?.addEventListener('click', () => goTo(currentIndex() - 1));
+    carousel
+      .querySelector('[data-next]')
+      ?.addEventListener('click', () => goTo(currentIndex() + 1));
+    dots.forEach((dot, index) => dot.addEventListener('click', () => goTo(index)));
+
+    track.addEventListener(
+      'scroll',
+      () => {
+        const active = currentIndex();
+        dots.forEach((dot, index) => {
+          if (index === active) {
+            dot.setAttribute('aria-current', 'true');
+          } else {
+            dot.removeAttribute('aria-current');
+          }
+        });
+      },
+      { passive: true },
+    );
+  });
+
+  document.addEventListener('contextmenu', (event) => {
+    if (
+      event.target instanceof HTMLImageElement &&
+      event.target.classList.contains('artwork-image')
+    ) {
+      event.preventDefault();
+    }
+  });
+</script>

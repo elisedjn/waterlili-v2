@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+@theme {
+  --color-pink: #e88a73;
+  --color-green: #a5a35f;
+  --color-yellow: #eebf60;
+  --color-orange: #e1964f;
+  --color-blue: #66837c;
+  --color-grey: #535455;
+  --color-white: #f7f2ee;
+  --font-heading: "Amatic SC", cursive;
+  --font-body: "Quicksand", sans-serif;
+}
+
+:root {
+  --pink: #e88a73;
+  --green: #a5a35f;
+  --yellow: #eebf60;
+  --orange: #e1964f;
+  --blue: #66837c;
+  --grey: #535455;
+  --white: #f7f2ee;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgb(235 157 138 / 0.42), transparent 34rem),
+    radial-gradient(circle at 85% 15%, rgb(231 172 117 / 0.24), transparent 30rem),
+    radial-gradient(circle at 10% 85%, rgb(192 189 117 / 0.22), transparent 28rem),
+    radial-gradient(circle at 92% 70%, rgb(231 172 117 / 0.24), transparent 30rem),
+    radial-gradient(circle at 50% 75%, rgb(234 197 124 / 0.22), transparent 32rem),
+    linear-gradient(135deg, var(--white), #fff6f0 48%, #f7ded5);
+  color: var(--grey);
+  font-family: var(--font-body);
+  font-weight: 500;
+}
+
+::selection {
+  background: var(--yellow);
+  color: var(--white);
+}
+
+.prose-workshop {
+  color: var(--grey);
+  opacity: 0.9;
+}
+
+.prose-workshop h2 {
+  margin-top: 2rem;
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1;
+}
+
+.prose-workshop p {
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  line-height: 1.8;
+}
+
+.prose-workshop ul {
+  margin-top: 1rem;
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+
+.prose-workshop li {
+  margin-top: 0.5rem;
+}
+
+
+.prose-blog {
+  color: var(--grey);
+  opacity: 0.9;
+}
+
+.prose-blog h2 {
+  margin-top: 2rem;
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  line-height: 1;
+  font-weight: 700;
+}
+
+.prose-blog h3 {
+  margin-top: 2rem;
+  font-size: clamp(1rem, 5vw, 1rem);
+  line-height: 1;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.prose-blog p {
+  margin-top: 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.prose-blog ul {
+  margin-top: 1rem;
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+
+.prose-blog li {
+  margin-top: 0.5rem;
+}
+
+.prose-blog a {
+  color: var(--pink);
+  font-weight: 700;
+}
+
+.carousel-track {
+  scrollbar-width: none;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.artwork-image {
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}

@@ -1,0 +1,21 @@
+---
+interface Props {
+  /** Render as another element, e.g. "article" (default) or "div". */
+  as?: 'article' | 'div' | 'li';
+  /** `soft` = translucent white with pink shadow (shop look), `outline` = bordered (workshop look). */
+  variant?: 'soft' | 'outline';
+  class?: string;
+}
+
+const { as: Element = 'article', variant = 'soft', class: className } = Astro.props;
+const variants: Record<NonNullable<Props['variant']>, string> = {
+  soft: 'bg-white/75 shadow-xl shadow-pink/10 hover:-translate-y-1',
+  outline: 'border border-pink/25 bg-white/80 shadow-sm hover:-translate-y-1',
+};
+---
+
+<Element
+  class:list={['overflow-hidden rounded-4xl transition', variants[variant], className]}
+>
+  <slot />
+</Element>

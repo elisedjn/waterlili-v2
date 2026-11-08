@@ -1,0 +1,34 @@
+---
+import Icon from '@components/Icon.astro';
+import LinkButton from '@components/LinkButton.astro';
+import { contactLinks } from '@config/contact';
+import { type Locale } from '@i18n/config';
+import { sharedText } from '@i18n/ui';
+import { getBookingHref } from '@utils/booking';
+
+interface Props {
+  lang: Locale;
+  artworkTitle?: string;
+}
+
+const { lang, artworkTitle } = Astro.props;
+const text = sharedText[lang];
+const message = artworkTitle ? text.orderMessage(artworkTitle) : text.generalMessage;
+const subject = artworkTitle ? text.orderSubject(artworkTitle) : text.generalMessage;
+const emailHref = `${contactLinks.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+---
+
+<div class='flex flex-wrap gap-3'>
+  <LinkButton href={getBookingHref(contactLinks.whatsapp, message)} color='green' openInNewTab>
+    <Icon name='whatsapp' class='size-5' />
+    WhatsApp
+  </LinkButton>
+  <LinkButton href={emailHref}>
+    <Icon name='email' class='size-5' />
+    Email
+  </LinkButton>
+  <LinkButton href={contactLinks.instagram} color='orange' openInNewTab>
+    <Icon name='instagram' class='size-5' />
+    Instagram
+  </LinkButton>
+</div>

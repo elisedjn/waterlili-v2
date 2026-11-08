@@ -1,0 +1,38 @@
+---
+import Carousel from '@components/Carousel.astro';
+import FormatList from '@components/FormatList.astro';
+import { type Locale } from '@i18n/config';
+import { artworkPath, withBase } from '@i18n/routes';
+import Card from '@components/Card.astro';
+import { toCarouselImages, type Artwork } from '@utils/artworks';
+
+interface Props {
+  artwork: Artwork;
+  lang: Locale;
+  priority?: boolean;
+}
+
+const { artwork, lang, priority } = Astro.props;
+const title = artwork.data.title[lang];
+const href = withBase(artworkPath(lang, artwork.slug));
+---
+
+<Card>
+  <Carousel
+    images={toCarouselImages(artwork.images, 'card')}
+    title={title}
+    alt={artwork.data.alt[lang]}
+    lang={lang}
+    variant='card'
+    href={href}
+    priority={priority}
+  />
+  <div class='relative p-6 pt-3'>
+    <h2 class='font-heading text-4xl font-bold leading-[0.9] text-pink'>
+      <a href={href} class='after:absolute after:inset-0'>{title}</a>
+    </h2>
+    <div class='mt-3'>
+      <FormatList formats={artwork.data.formats} lang={lang} />
+    </div>
+  </div>
+</Card>

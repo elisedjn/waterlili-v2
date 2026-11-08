@@ -1,0 +1,19 @@
+# PLACEHOLDER: replace with a real watercolor (see README.md).
+title:
+  en: 'The Fox and the Moon'
+  fr: 'Le Renard et la Lune'
+  pt: 'A Raposa e a Lua'
+alt:
+  en: 'A little fox sits and gazes up at a crescent moon, under a sky of blue and purple sprinkled with stars.'
+  fr: 'Un petit renard assis contemple un croissant de lune, sous un ciel bleu et violet parsemé d''étoiles.'
+  pt: 'Uma pequena raposa sentada contempla uma lua crescente, sob um céu azul e roxo salpicado de estrelas.'
+description:
+  en: |-
+    This fox is here to remind you that the Moon is always there for us, and that dreaming a little never hurts.
+  fr: |-
+    Ce renard est là pour te rappeler que la Lune est toujours là pour nous, et que rêver un peu ne fait jamais de mal.
+  pt: |-
+    Esta raposa está aqui para te lembrar que a Lua está sempre lá para nós, e que sonhar um pouco nunca fez mal a ninguém.
+formats: [sticker, a6, a5]
+tags: [animals, night]
+order: 20

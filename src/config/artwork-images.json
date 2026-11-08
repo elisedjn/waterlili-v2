@@ -1,0 +1,528 @@
+{
+  "baleine-anniversaire": [
+    {
+      "card": {
+        "src": "/artworks/baleine-anniversaire/01-card.webp",
+        "width": 497,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/baleine-anniversaire/01-large.webp",
+        "width": 993,
+        "height": 1400
+      }
+    }
+  ],
+  "ballet-aquatique": [
+    {
+      "card": {
+        "src": "/artworks/ballet-aquatique/01-card.webp",
+        "width": 497,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/ballet-aquatique/01-large.webp",
+        "width": 993,
+        "height": 1400
+      }
+    }
+  ],
+  "by-the-fire": [
+    {
+      "card": {
+        "src": "/artworks/by-the-fire/01-card.webp",
+        "width": 497,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/by-the-fire/01-large.webp",
+        "width": 993,
+        "height": 1400
+      }
+    }
+  ],
+  "chat-roux": [
+    {
+      "card": {
+        "src": "/artworks/chat-roux/01-card.webp",
+        "width": 497,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/chat-roux/01-large.webp",
+        "width": 993,
+        "height": 1400
+      }
+    }
+  ],
+  "hero-des-cimes": [
+    {
+      "card": {
+        "src": "/artworks/hero-des-cimes/01-card.webp",
+        "width": 497,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/hero-des-cimes/01-large.webp",
+        "width": 993,
+        "height": 1400
+      }
+    }
+  ],
+  "heure-d-etude": [
+    {
+      "card": {
+        "src": "/artworks/heure-d-etude/01-card.webp",
+        "width": 483,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/heure-d-etude/01-large.webp",
+        "width": 966,
+        "height": 1400
+      }
+    }
+  ],
+  "love": [
+    {
+      "card": {
+        "src": "/artworks/love/01-card.webp",
+        "width": 497,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/love/01-large.webp",
+        "width": 993,
+        "height": 1400
+      }
+    }
+  ],
+  "magicien": [
+    {
+      "card": {
+        "src": "/artworks/magicien/01-card.webp",
+        "width": 497,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/magicien/01-large.webp",
+        "width": 993,
+        "height": 1400
+      }
+    }
+  ],
+  "noel-cadeau": [
+    {
+      "card": {
+        "src": "/artworks/noel-cadeau/01-card.webp",
+        "width": 527,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-cadeau/01-large.webp",
+        "width": 1054,
+        "height": 1400
+      }
+    },
+    {
+      "card": {
+        "src": "/artworks/noel-cadeau/02-card.webp",
+        "width": 527,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-cadeau/02-large.webp",
+        "width": 1054,
+        "height": 1400
+      }
+    },
+    {
+      "card": {
+        "src": "/artworks/noel-cadeau/03-card.webp",
+        "width": 527,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-cadeau/03-large.webp",
+        "width": 1054,
+        "height": 1400
+      }
+    },
+    {
+      "card": {
+        "src": "/artworks/noel-cadeau/04-card.webp",
+        "width": 527,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-cadeau/04-large.webp",
+        "width": 1054,
+        "height": 1400
+      }
+    }
+  ],
+  "noel-chorale": [
+    {
+      "card": {
+        "src": "/artworks/noel-chorale/01-card.webp",
+        "width": 525,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-chorale/01-large.webp",
+        "width": 1049,
+        "height": 1400
+      }
+    },
+    {
+      "card": {
+        "src": "/artworks/noel-chorale/02-card.webp",
+        "width": 527,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-chorale/02-large.webp",
+        "width": 1054,
+        "height": 1400
+      }
+    },
+    {
+      "card": {
+        "src": "/artworks/noel-chorale/03-card.webp",
+        "width": 527,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-chorale/03-large.webp",
+        "width": 1054,
+        "height": 1400
+      }
+    },
+    {
+      "card": {
+        "src": "/artworks/noel-chorale/04-card.webp",
+        "width": 527,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-chorale/04-large.webp",
+        "width": 1054,
+        "height": 1400
+      }
+    }
+  ],
+  "noel-creche": [
+    {
+      "card": {
+        "src": "/artworks/noel-creche/01-card.webp",
+        "width": 525,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-creche/01-large.webp",
+        "width": 1049,
+        "height": 1400
+      }
+    },
+    {
+      "card": {
+        "src": "/artworks/noel-creche/02-card.webp",
+        "width": 527,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-creche/02-large.webp",
+        "width": 1054,
+        "height": 1400
+      }
+    },
+    {
+      "card": {
+        "src": "/artworks/noel-creche/03-card.webp",
+        "width": 527,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-creche/03-large.webp",
+        "width": 1054,
+        "height": 1400
+      }
+    },
+    {
+      "card": {
+        "src": "/artworks/noel-creche/04-card.webp",
+        "width": 527,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-creche/04-large.webp",
+        "width": 1054,
+        "height": 1400
+      }
+    }
+  ],
+  "noel-gui": [
+    {
+      "card": {
+        "src": "/artworks/noel-gui/01-card.webp",
+        "width": 559,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-gui/01-large.webp",
+        "width": 1119,
+        "height": 1400
+      }
+    },
+    {
+      "card": {
+        "src": "/artworks/noel-gui/02-card.webp",
+        "width": 559,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-gui/02-large.webp",
+        "width": 1119,
+        "height": 1400
+      }
+    },
+    {
+      "card": {
+        "src": "/artworks/noel-gui/03-card.webp",
+        "width": 527,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-gui/03-large.webp",
+        "width": 1054,
+        "height": 1400
+      }
+    },
+    {
+      "card": {
+        "src": "/artworks/noel-gui/04-card.webp",
+        "width": 527,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-gui/04-large.webp",
+        "width": 1054,
+        "height": 1400
+      }
+    }
+  ],
+  "noel-sapin": [
+    {
+      "card": {
+        "src": "/artworks/noel-sapin/01-card.webp",
+        "width": 527,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-sapin/01-large.webp",
+        "width": 1054,
+        "height": 1400
+      }
+    },
+    {
+      "card": {
+        "src": "/artworks/noel-sapin/02-card.webp",
+        "width": 527,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-sapin/02-large.webp",
+        "width": 1054,
+        "height": 1400
+      }
+    },
+    {
+      "card": {
+        "src": "/artworks/noel-sapin/03-card.webp",
+        "width": 527,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/noel-sapin/03-large.webp",
+        "width": 1054,
+        "height": 1400
+      }
+    }
+  ],
+  "petite-fille-et-mer": [
+    {
+      "card": {
+        "src": "/artworks/petite-fille-et-mer/01-card.webp",
+        "width": 700,
+        "height": 497
+      },
+      "large": {
+        "src": "/artworks/petite-fille-et-mer/01-large.webp",
+        "width": 1400,
+        "height": 993
+      }
+    }
+  ],
+  "positive-mushroom": [
+    {
+      "card": {
+        "src": "/artworks/positive-mushroom/01-card.webp",
+        "width": 497,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/positive-mushroom/01-large.webp",
+        "width": 993,
+        "height": 1400
+      }
+    }
+  ],
+  "positive-panda": [
+    {
+      "card": {
+        "src": "/artworks/positive-panda/01-card.webp",
+        "width": 497,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/positive-panda/01-large.webp",
+        "width": 993,
+        "height": 1400
+      }
+    }
+  ],
+  "positive-pear": [
+    {
+      "card": {
+        "src": "/artworks/positive-pear/01-card.webp",
+        "width": 497,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/positive-pear/01-large.webp",
+        "width": 993,
+        "height": 1400
+      }
+    }
+  ],
+  "positive-strawberry": [
+    {
+      "card": {
+        "src": "/artworks/positive-strawberry/01-card.webp",
+        "width": 497,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/positive-strawberry/01-large.webp",
+        "width": 993,
+        "height": 1400
+      }
+    }
+  ],
+  "positive-toast": [
+    {
+      "card": {
+        "src": "/artworks/positive-toast/01-card.webp",
+        "width": 497,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/positive-toast/01-large.webp",
+        "width": 993,
+        "height": 1400
+      }
+    }
+  ],
+  "positive-tomato": [
+    {
+      "card": {
+        "src": "/artworks/positive-tomato/01-card.webp",
+        "width": 497,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/positive-tomato/01-large.webp",
+        "width": 993,
+        "height": 1400
+      }
+    }
+  ],
+  "renard-et-la-lune": [
+    {
+      "card": {
+        "src": "/artworks/renard-et-la-lune/01-card.webp",
+        "width": 493,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/renard-et-la-lune/01-large.webp",
+        "width": 987,
+        "height": 1400
+      }
+    },
+    {
+      "card": {
+        "src": "/artworks/renard-et-la-lune/02-card.webp",
+        "width": 527,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/renard-et-la-lune/02-large.webp",
+        "width": 1054,
+        "height": 1400
+      }
+    },
+    {
+      "card": {
+        "src": "/artworks/renard-et-la-lune/03-card.webp",
+        "width": 527,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/renard-et-la-lune/03-large.webp",
+        "width": 1054,
+        "height": 1400
+      }
+    },
+    {
+      "card": {
+        "src": "/artworks/renard-et-la-lune/04-card.webp",
+        "width": 525,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/renard-et-la-lune/04-large.webp",
+        "width": 780,
+        "height": 1040
+      }
+    }
+  ],
+  "sunset": [
+    {
+      "card": {
+        "src": "/artworks/sunset/01-card.webp",
+        "width": 497,
+        "height": 700
+      },
+      "large": {
+        "src": "/artworks/sunset/01-large.webp",
+        "width": 993,
+        "height": 1400
+      }
+    }
+  ],
+  "sur-le-dos-de-la-baleine": [
+    {
+      "card": {
+        "src": "/artworks/sur-le-dos-de-la-baleine/01-card.webp",
+        "width": 700,
+        "height": 497
+      },
+      "large": {
+        "src": "/artworks/sur-le-dos-de-la-baleine/01-large.webp",
+        "width": 1400,
+        "height": 993
+      }
+    }
+  ]
+}

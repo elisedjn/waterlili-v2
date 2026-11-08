@@ -1,0 +1,281 @@
+---
+import { getCollection } from 'astro:content';
+import Card from '@components/Card.astro';
+import NextWorkshopCard from '@components/NextWorkshopCard.astro';
+import { workshopLocations } from '@config/locations';
+import LinkButton from '@components/LinkButton.astro';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { type Locale } from '@i18n/config';
+import { artworkPath, localizedRoutes, withBase } from '@i18n/routes';
+import { getArtworks } from '@utils/artworks';
+import { isWorkshopActive } from '@utils/workshops';
+import { homeContent, nextWorkshopContent, siteName } from '@i18n/ui';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const content = homeContent[lang];
+const workshopsContent = nextWorkshopContent[lang];
+const posts = (
+  await getCollection('blog', ({ data }) => data.lang === lang && !data.draft)
+)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 2);
+const upcomingWorkshops = (
+  await getCollection('workshops', ({ data }) => {
+    return (
+      data.lang === lang &&
+      !data.draft &&
+      Boolean(data.startDate) &&
+      isWorkshopActive(data)
+    );
+  })
+).sort((a, b) => {
+  return (a.data.startDate?.valueOf() ?? 0) - (b.data.startDate?.valueOf() ?? 0);
+});
+const previewArtworks = (await getArtworks()).slice(0, 3);
+const blogCtaText = {
+  en: 'Read the creativity journal',
+  fr: 'Lire le carnet créatif',
+  pt: 'Ler o diário criativo',
+}[lang];
+const aboutParagraphs = content.aboutText.split('\n').map((paragraph) => {
+  return paragraph.split(/(\*\*.+?\*\*)/g).map((part) => {
+    const isBold = part.startsWith('**') && part.endsWith('**');
+
+    return {
+      text: isBold ? part.slice(2, -2) : part,
+      isBold,
+    };
+  });
+});
+---
+
+<BaseLayout
+  title={`${content.seoTitle} | ${siteName}`}
+  description={content.seoDescription}
+  lang={lang}
+  routeKey='home'
+>
+  <section class='relative isolate'>
+    <div
+      class='relative grid items-center lg:px-[max(1.25rem,calc((100vw-72rem)/2+1.25rem))] lg:py-20'
+    >
+      <img
+        src={withBase('/images/creative-watercolor-workshop-ericeira-portugal-hero.jpg')}
+        alt=''
+        width='1200'
+        height='1600'
+        decoding='async'
+        fetchpriority='high'
+        class='absolute inset-0 hidden h-full w-full object-cover lg:block'
+      />
+      <div class='absolute inset-0 hidden bg-grey/45 backdrop-blur-[1px] lg:block'></div>
+      <div class='relative overflow-hidden p-7 lg:overflow-visible lg:p-0'>
+        <img
+          src={withBase(
+            '/images/creative-watercolor-workshop-ericeira-portugal-hero.jpg',
+          )}
+          alt=''
+          width='1200'
+          height='1600'
+          decoding='async'
+          fetchpriority='high'
+          class='absolute inset-0 h-full w-full scale-200 object-cover lg:hidden'
+        />
+        <div class='absolute inset-0 bg-grey/45 backdrop-blur-[1px] lg:hidden'></div>
+        <div class='relative'>
+          <p
+            class='text-sm font-black uppercase tracking-[0.28em] text-right lg:text-left text-white/70'
+          >
+            {content.eyebrow}
+          </p>
+          <h1
+            class='text-white mt-6 font-heading text-right lg:text-left text-7xl font-bold leading-[0.82] tracking-tight md:text-9xl'
+          >
+            {content.title}
+          </h1>
+          <p class='mt-8 max-w-3xl text-white/85'>{content.intro}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class='px-5 py-8'>
+    <div
+      class='mx-auto max-w-6xl gap-8 rounded-[2.5rem] bg-white/40 shadow-xl shadow-pink/20'
+    >
+      <div class='md:flex md:flex-row items-center gap-8 p-6 md:p-10'>
+        <div class='hidden md:grid gap-6 grid-cols-2 md:flex-2'>
+          {
+            workshopLocations.map((location) => (
+              <NextWorkshopCard
+                lang={lang}
+                location={location}
+                workshop={upcomingWorkshops.find(
+                  (workshop) => workshop.data.location === location,
+                )}
+              />
+            ))
+          }
+        </div>
+        <div class='text-center md:text-right md:flex-1'>
+          <h2 class='font-heading text-6xl font-bold leading-none text-pink md:text-7xl'>
+            {workshopsContent.label}
+          </h2>
+          <p class='mt-4 text-grey/75'>{workshopsContent.description}</p>
+          <div class='mt-8'>
+            <LinkButton href={withBase(localizedRoutes.workshops[lang])} color='orange'>
+              {workshopsContent.cta}
+            </LinkButton>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class='px-5 pb-8'>
+    <div
+      class='mx-auto max-w-6xl gap-8 rounded-[2.5rem] bg-white/40 shadow-xl shadow-pink/20'
+    >
+      <div class='grid items-center gap-8 p-6 md:grid-cols-2 md:p-10'>
+        <div class='text-center md:text-left'>
+          <h2 class='font-heading text-6xl font-bold leading-none text-pink md:text-7xl'>
+            {content.shopTitle}
+          </h2>
+          <p class='mt-4 text-grey/75'>{content.shopIntro}</p>
+          <div class='mt-8'>
+            <LinkButton href={withBase(localizedRoutes.shop[lang])} color='blue'>
+              {content.shopCta}
+            </LinkButton>
+          </div>
+        </div>
+        <ul class='hidden md:grid gap-4 sm:grid-cols-3 md:grid-cols-2 lg:grid-cols-3'>
+          {
+            previewArtworks.map((artwork) => (
+              <li>
+                <a
+                  href={withBase(artworkPath(lang, artwork.slug))}
+                  class='block overflow-hidden rounded-2xl bg-paper shadow-md shadow-pink/10 transition hover:-translate-y-1'
+                >
+                  <img
+                    src={withBase(artwork.images[0].card.src)}
+                    alt={artwork.data.title[lang]}
+                    width={artwork.images[0].card.width}
+                    height={artwork.images[0].card.height}
+                    loading='lazy'
+                    decoding='async'
+                    draggable='false'
+                    class='artwork-image aspect-[210/297] w-full object-cover'
+                  />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class='py-4 bg-pink'>
+    <div
+      class='mx-auto max-w-6xl grid items-center gap-8 p-8 md:grid-cols-[14rem_1fr] md:p-10'
+    >
+      <img
+        src={withBase(
+          '/images/waterlili-creation-founder-watercolor-workshop-portugal.jpg',
+        )}
+        alt='Waterlili Creation artist leading a watercolor workshop'
+        width='700'
+        height='700'
+        loading='lazy'
+        decoding='async'
+        class='mx-auto size-58 rounded-full object-cover object-top shadow-xl shadow-pink/15'
+      />
+      <div>
+        <p class='text-sm font-black uppercase tracking-[0.24em] text-white'>
+          {content.aboutTitle}
+        </p>
+        <h2
+          class='mt-3 font-heading text-5xl font-bold leading-none text-white md:text-6xl'
+        >
+          Waterlili
+        </h2>
+        <div class='mt-4 space-y-3 text-white'>
+          {
+            aboutParagraphs.map((paragraph) => (
+              <p>
+                {paragraph.map((part) =>
+                  part.isBold ? (
+                    <strong class='font-bold text-white'>{part.text}</strong>
+                  ) : (
+                    part.text
+                  ),
+                )}
+              </p>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class='p-5'>
+    <div
+      class='mx-auto grid max-w-6xl gap-8 rounded-[2.5rem] bg-white/40 p-8 text-grey shadow-xl shadow-pink/20 md:grid-cols-[0.8fr_1.2fr] md:p-12'
+    >
+      <div>
+        <h2 class='mt-4 font-heading text-6xl font-bold leading-none'>
+          {content.blogTitle}
+        </h2>
+        <p class='mt-5 text-grey/75'>{content.blogIntro}</p>
+        <div class='mt-7'>
+          <LinkButton href={withBase(localizedRoutes.blog[lang])} color='green'>
+            {blogCtaText}
+          </LinkButton>
+        </div>
+      </div>
+      <div class='grid gap-4'>
+        {
+          posts.map((post) => (
+            <Card variant='soft'>
+              <a
+                href={withBase(`${localizedRoutes.blog[lang]}${post.data.slug}/`)}
+                class='grid gap-4 p-4 sm:grid-cols-[8rem_1fr]'
+              >
+                {post.data.image ? (
+                  <img
+                    src={withBase(post.data.image)}
+                    alt={post.data.title}
+                    width='1200'
+                    height='800'
+                    class='h-32 w-full rounded-2xl object-cover'
+                    loading='lazy'
+                    decoding='async'
+                  />
+                ) : (
+                  <div class='h-32 rounded-2xl bg-blue/25' />
+                )}
+                <div>
+                  <p class='text-xs font-black uppercase tracking-[0.2em] text-blue'>
+                    {post.data.date.toLocaleDateString(lang, {
+                      month: 'long',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}
+                  </p>
+                  <h3 class='mt-3 font-heading text-4xl font-bold leading-none'>
+                    {post.data.title}
+                  </h3>
+                  <p class='mt-3 text-grey/70'>{post.data.description}</p>
+                </div>
+              </a>
+            </Card>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
