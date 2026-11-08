@@ -82,7 +82,7 @@ export const sharedText: Record<
       'Send me a message with the format you would like, and we will arrange the rest together.',
     backToGallery: 'Back to all prints',
     printNote:
-      "Print on 200 g/m² matte paper.\nNote: Although every care has been taken with the photos to reflect reality, the colors of the final print may vary slightly depending on your screen.",
+      'Print on 200 g/m² matte paper.\nNote: Although every care has been taken with the photos to reflect reality, the colors of the final print may vary slightly depending on your screen.',
     filterFormat: 'Format',
     filterTheme: 'Theme',
     filterClearAll: 'Clear all filters',
@@ -156,7 +156,7 @@ export const sharedText: Record<
       'Envie-me uma mensagem com o formato que deseja, e combinamos o resto em conjunto.',
     backToGallery: 'Voltar a todas as impressões',
     printNote:
-      "Impressão em papel mate 200g/m²\nNota: Apesar de todo o cuidado com as fotografias para refletir a realidade, as cores da impressão final podem variar ligeiramente consoante os ecrãs.",
+      'Impressão em papel mate 200g/m²\nNota: Apesar de todo o cuidado com as fotografias para refletir a realidade, as cores da impressão final podem variar ligeiramente consoante os ecrãs.',
     filterFormat: 'Formato',
     filterTheme: 'Tema',
     filterClearAll: 'Limpar todos os filtros',
@@ -213,10 +213,10 @@ export const homeContent: Record<
     seoTitle: 'Ateliers créatifs à Ericeira et Santa Cruz, et tirages d’aquarelles',
     seoDescription:
       'Ateliers créatifs en petit groupe à Ericeira, Santa Cruz et à domicile au Portugal, ainsi que des tirages d’aquarelles originales par Waterlili Creation.',
-    eyebrow: "Aquarelle et ateliers créatifs au bord de l'océan",
-    title: 'Des moments doux et joyeux pour les mains curieuses.',
+    eyebrow: 'Artiste aquarelliste entre France et Portugal',
+    title: 'Remettre de la couleur et de la créativité dans ton quotidien.',
     intro:
-      'Waterlili Creation propose des moments créatifs à Ericeira, Santa Cruz et chez vous. Chaque atelier est pensé pour être simple, chaleureux et accessible.',
+      'Des aquarelles, des ateliers au bord de l’Atlantique, des retraites créatives en France. Une invitation à ralentir, à s’émerveiller, et à créer pour le plaisir.',
     blogTitle: 'Carnet créatif pour visiteurs curieux',
     blogIntro:
       "Une petite collection d'idées créatives, de guides locaux tout doux, d'inspirations saisonnières et de moments faits main à vivre autour d'Ericeira, Santa Cruz et la côte ouest du Portugal.",
@@ -233,10 +233,10 @@ export const homeContent: Record<
       'Workshops criativos na Ericeira e em Santa Cruz, e impressões de aguarelas',
     seoDescription:
       'Workshops criativos em pequeno grupo na Ericeira, em Santa Cruz e em casa em Portugal, e impressões de aguarelas originais da Waterlili Creation.',
-    eyebrow: 'Aguarela e workshops criativos junto ao mar',
-    title: 'Momentos tranquilos e alegres para mãos curiosas.',
+    eyebrow: 'Artista de aguarela entre França e Portugal',
+    title: 'Trazer cor e criatividade de volta ao teu dia a dia.',
     intro:
-      'Waterlili Creation leva momentos criativos à Ericeira, Santa Cruz e a casas particulares. Cada sessão é pensada para ser acolhedora, simples e fácil de participar.',
+      'Aguarelas, workshops à beira do Atlântico, retiros criativos em França. Um convite para abrandar, para te maravilhares, e para criar pelo simples prazer de criar.',
     blogTitle: 'Diário Criativo para Visitantes Curiosos',
     blogIntro:
       'Uma pequena coleção de ideias criativas, guias locais tranquilos, inspiração sazonal e momentos feitos à mão para desfrutar na Ericeira, em Santa Cruz e na costa oeste de Portugal.',
