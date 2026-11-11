@@ -4,14 +4,17 @@ title:
   pt: 'Natal - Árvore'
 alt:
   en: 'A band of gnomes decorates a big green Christmas tree with red baubles and golden garlands, while a mischievous cat plays with an ornament.'
-  fr: 'Une joyeuse bande de gnomes décore un grand sapin vert de boules rouges et de guirlandes dorées, pendant qu''un chat espiègle joue avec une décoration.'
+  fr: "Une joyeuse bande de gnomes décore un grand sapin vert de boules rouges et de guirlandes dorées, pendant qu'un chat espiègle joue avec une décoration."
   pt: 'Um grupo animado de gnomos decora uma grande árvore de Natal verde com bolas vermelhas e grinaldas douradas, enquanto um gato traquina brinca com um enfeite.'
 description:
   en: |-
     Decorating the tree together is already half the magic of Christmas. And there's always someone playing with the baubles!
+    The text written on the card can be customised.
   fr: |-
     Décorer le sapin à plusieurs, c'est déjà la moitié de la magie de Noël. Et il y a toujours quelqu'un pour jouer avec les boules !
+    Le texte inscrit sur la carte peut être personnalisé.
   pt: |-
     Decorar a árvore em conjunto já é metade da magia do Natal. E há sempre alguém a brincar com as bolas!
+    O texto escrito na carta pode ser personalizado.
 formats: [a5card]
 tags: [christmas]
