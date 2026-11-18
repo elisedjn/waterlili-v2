@@ -641,7 +641,7 @@ export const newsletterSignupContent: Record<
       "Welcome! Your signup is confirmed, and you'll soon receive your first free wallpaper.",
     heading: 'Need a little softness?',
     paragraphs: [
-      'Twice a month, receive a <strong>dose of comfort, joy, and color</strong> in your inbox.',
+      'Once a month, receive a <strong>dose of comfort, joy, and color</strong> in your inbox.',
       'And a little gift: every month, discover an <strong>exclusive mobile wallpaper</strong> to download!',
       'So, are you ready to <strong>make your inbox sparkle?</strong>',
     ],
@@ -670,7 +670,7 @@ export const newsletterSignupContent: Record<
       "Bienvenue! Ton inscription est confirmée, tu recevras bientôt ton premier fond d'écran gratuit.",
     heading: "Besoin d'un peu de douceur ?",
     paragraphs: [
-      'Deux fois par mois, reçois une <strong>dose de réconfort, de joie et de couleurs</strong> dans ta boîte mail.',
+      'Une fois par mois, reçois une <strong>dose de réconfort, de joie et de couleurs</strong> dans ta boîte mail.',
       'Et petit cadeau : chaque mois, découvre un <strong>fond d’écran mobile exclusif</strong> à télécharger !',
       'Alors, es-tu prêt.e à <strong>faire pétiller ta boîte mail ?</strong>',
     ],
@@ -699,7 +699,7 @@ export const newsletterSignupContent: Record<
       'Bem-vinda! A sua inscrição está confirmada e em breve receberá o seu primeiro wallpaper gratuito.',
     heading: 'Precisa de um pouco de doçura?',
     paragraphs: [
-      'Duas vezes por mês, receba uma <strong>dose de conforto, alegria e cor</strong> na sua caixa de entrada.',
+      'Uma vez por mês, receba uma <strong>dose de conforto, alegria e cor</strong> na sua caixa de entrada.',
       'E um pequeno presente: todos os meses, descubra um <strong>wallpaper exclusivo para telemóvel</strong> para descarregar!',
       'Então, está pronta para <strong>dar brilho à sua caixa de entrada?</strong>',
     ],

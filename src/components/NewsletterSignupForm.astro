@@ -13,6 +13,13 @@ interface Props {
 const { lang, format = 'default', showText = true, instanceId, includeScripts = true } = Astro.props;
 const content = newsletterSignupContent[lang];
 const recaptchaSrc = `https://www.google.com/recaptcha/api.js?render=6LdWV0MsAAAAACDm3ytQucRa7noS3xmaxTmghAwO&hl=${lang}`;
+// Separate Brevo lists: French form for `fr`, English form for `en` and `pt`.
+const brevoFormIds: Record<Locale, string> = {
+  fr: 'MUIFAOvH_fQ3Aw8UwVThBvD355Ja-s4tFKlJZK9xqSDGBuFy2VJP8Vyau7o_bwBxXPf26sE60fKM55rJqH5mWs_nmsgJhLVidgEDP-LsMjYBgYoOGV_XPN-6Skx3v2dWvkk6o3j6u_tHIaQwYTTeufMzXQzI7vDZKy0o4VXWqUB2NT0-wPRxjAkIsJPn2K-iP5BNqBb63DmTHsIW3g==',
+  en: 'MUIFAPkoKvOGJ4fOFvz8mytZdcDQNFlUBB9b3AhTMyLfHmBF7kvjHUAIGAR2DrnrFKKf7dpq4_Ye8k3tP7EtkD9W5zMF86ri5ExzkElunAlRDwphAdFf9KtKC3cLgfvQiqud4RGG-qopJpMEAb8tmhAJWk1vef4jnsOEyM5NeDxXjgv4zMrXCHSDUMSVlvYPfj9G2tQiR3KjHOcuQg==',
+  pt: 'MUIFAPkoKvOGJ4fOFvz8mytZdcDQNFlUBB9b3AhTMyLfHmBF7kvjHUAIGAR2DrnrFKKf7dpq4_Ye8k3tP7EtkD9W5zMF86ri5ExzkElunAlRDwphAdFf9KtKC3cLgfvQiqud4RGG-qopJpMEAb8tmhAJWk1vef4jnsOEyM5NeDxXjgv4zMrXCHSDUMSVlvYPfj9G2tQiR3KjHOcuQg==',
+};
+const formAction = `https://84f0682c.sibforms.com/serve/${brevoFormIds[lang]}`;
 const isCard = format === 'card';
 const suffix = instanceId ? `-${instanceId}` : '';
 const formId = instanceId ? `sib-form${suffix}` : 'sib-form';
@@ -111,7 +118,7 @@ const emailInputId = instanceId ? `EMAIL${suffix}` : 'EMAIL';
         <form
           id={formId}
           method='POST'
-          action='https://84f0682c.sibforms.com/serve/MUIFAOvH_fQ3Aw8UwVThBvD355Ja-s4tFKlJZK9xqSDGBuFy2VJP8Vyau7o_bwBxXPf26sE60fKM55rJqH5mWs_nmsgJhLVidgEDP-LsMjYBgYoOGV_XPN-6Skx3v2dWvkk6o3j6u_tHIaQwYTTeufMzXQzI7vDZKy0o4VXWqUB2NT0-wPRxjAkIsJPn2K-iP5BNqBb63DmTHsIW3g=='
+          action={formAction}
           data-type='subscription'
         >
           {showText && <div class='sib-form-block bg-transparent !px-0 !pb-2 text-left text-grey'>
@@ -231,6 +238,7 @@ const emailInputId = instanceId ? `EMAIL${suffix}` : 'EMAIL';
 {
   includeScripts && (
     <>
+      <link rel='stylesheet' href='https://sibforms.com/forms/end-form/build/sib-styles.css' />
       <script is:inline define:vars={{ content, lang }}>
         window.REQUIRED_CODE_ERROR_MESSAGE = content.requiredCodeErrorMessage;
         window.LOCALE = lang;
