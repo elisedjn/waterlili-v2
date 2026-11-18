@@ -17,6 +17,11 @@ const canonicalUrl = new URL(withBase(canonicalPath), Astro.site).toString();
 const imageUrl = post.data.image
   ? new URL(withBase(post.data.image), Astro.site).toString()
   : undefined;
+const dateLabel = post.data.date.toLocaleDateString(lang, {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+});
 const seoAlternates = { [lang]: canonicalPath };
 const articleSchema = {
   '@context': 'https://schema.org',
@@ -51,41 +56,51 @@ const articleSchema = {
   image={post.data.image}
   jsonLd={articleSchema}
 >
-  <article class='mx-auto max-w-3xl px-5 py-16'>
+  <div class='mx-auto max-w-4xl px-5 pb-6 pt-10'>
     <a
       href={withBase(localizedRoutes.blog[lang])}
       class='text-sm font-black uppercase tracking-[0.18em] text-grey/55 transition hover:text-pink'
     >
       ← {sharedText[lang].latestPosts}
     </a>
-    <header class='mt-10'>
-      <p class='text-sm font-bold uppercase tracking-[0.22em] text-blue'>
-        {
-          post.data.date.toLocaleDateString(lang, {
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric',
-          })
-        }
-      </p>
-      <h1 class='mt-5 font-heading text-6xl leading-[0.9] text-grey md:text-7xl'>
-        {post.data.title}
-      </h1>
-      <p class='mt-6 text-xl leading-8 text-grey/75'>{post.data.description}</p>
-    </header>
-    {
-      post.data.image && (
+  </div>
+  {
+    post.data.image && (
+      <div class='relative'>
         <img
           src={withBase(post.data.image)}
-          alt={post.data.title}
-          width='1200'
-          height='800'
+          alt=''
+          width='1600'
+          height='700'
           decoding='async'
-          class='mt-10 aspect-[16/10] w-full rounded-[2rem] object-cover shadow-xl shadow-pink/15'
+          class='h-72 w-full object-cover md:h-[28rem]'
         />
+        <div class='absolute inset-0 bg-grey/70' />
+        <header class='absolute inset-0 mx-auto flex max-w-4xl flex-col justify-center px-5 text-white'>
+          <p class='text-sm font-bold uppercase tracking-[0.22em]'>
+            {dateLabel}
+          </p>
+          <h1 class='mt-4 font-heading text-6xl leading-[0.9] [text-shadow:0_2px_12px_rgb(0_0_0/0.45)] md:text-8xl'>
+            {post.data.title}
+          </h1>
+        </header>
+      </div>
+    )
+  }
+  <article class='mx-auto max-w-4xl px-5 pb-16 pt-10'>
+    {
+      !post.data.image && (
+        <header>
+          <p class='text-sm font-bold uppercase tracking-[0.22em] text-blue'>
+            {dateLabel}
+          </p>
+          <h1 class='mt-5 font-heading text-6xl leading-[0.9] text-grey md:text-7xl'>
+            {post.data.title}
+          </h1>
+        </header>
       )
     }
-    <div class='prose-blog mt-12 border-t border-grey/10 pt-10'>
+    <div class='prose-blog mt-6 flow-root'>
       <Content />
     </div>
   </article>
