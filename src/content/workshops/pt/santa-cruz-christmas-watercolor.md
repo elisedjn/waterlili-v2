@@ -5,7 +5,7 @@ lang: pt
 location: santa-cruz
 slug: aguarela-natal-santa-cruz
 startDate: 2026-11-13T19:00:00+00:00
-date: 'Sextas 13, 20 e 27 de novembro'
+date: 'Sextas 20/11, 27/11 & 06/12'
 time: '19h00 às 21h30'
 duration: '2h30'
 durationDetails: 'Todos os níveis'

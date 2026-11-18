@@ -4,8 +4,8 @@ description: 'This Christmas, give cards and tags that you’ve painted yourself
 lang: en
 location: santa-cruz
 slug: christmas-watercolor-santa-cruz
-startDate: 2026-11-13T10:00:00+01:00
-date: 'Fridays 13th, 20th, 27th of November'
+startDate: 2026-11-20T10:00:00+01:00
+date: 'Fridays 20/11, 27/11 & 06/12'
 time: '7pm to 9:30pm'
 duration: '2.5 hours'
 durationDetails: 'All levels'

@@ -5,7 +5,7 @@ lang: fr
 location: santa-cruz
 slug: aquarelle-noel-santa-cruz
 startDate: 2026-11-13T19:00:00+00:00
-date: 'Vendredis 13, 20 et 27 novembre'
+date: 'Vendredis 20/11, 27/11 & 06/12'
 time: '19h à 21h30'
 duration: '2h30'
 durationDetails: 'Tous niveaux'
